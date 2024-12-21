@@ -1,12 +1,12 @@
 import React from "react";
 import "./Comentario.css"
 
-const Comentario = () => (
+const Comentario = (props) => (
     <div className="Comentario" >
-        <h2> dartagnan </h2>
-        <p> dartagnan.jr@gmail.com</p>
-        <p> Olá eu sou um componente. </p>
-        <p> 20-12-2024 </p>
+        <h2>{props.nome} </h2>
+        <p> {props.email} </p>
+        <p> {props.children} </p>
+        <p> {props.data.toString()} </p>
     </div>
 );
 

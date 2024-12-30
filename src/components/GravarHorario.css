@@ -1,4 +1,4 @@
-.Pessoa {
+.GravarHorario {
     background-color: cadetblue;
     margin-bottom: 2rem;
     border: 1px solid violet;
@@ -10,32 +10,22 @@
     height: auto;
     width: 250px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
 }
 
-.Pessoa h4 {
+.GravarHorario h5 {
     margin-top: 5px;
-    margin-bottom: 5px;
     color: gold;
 }
 
-.Pessoa p {
+.GravarHorario form input {
+    width: 195px;
+}
+.GravarHorario form label {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-right: 10px;
     color: gold;
 }
 
-.btReg {
-    border-radius: 5%;
-    font-family: inherit;
-    margin-top: 2px;
-    cursor: pointer;
-}
-
-.LstMedics {
-    border-radius: 5%;
-    font-family: inherit;
-    margin-top: 2px;
-    cursor: pointer;
+.GravarHorario form button {
+    margin-top: 10px;
 }

@@ -1,3 +1,35 @@
 .Medicamento {
-    padding: 1.5rem;
+    position: relative;
+    background-color: cadetblue;
+    margin-bottom: 2rem;
+    border: 1px solid violet;
+    padding: 20px;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 55%;
+    border-radius: 15px;
+    height:auto;
+    width: 350px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: gold;  
   }
+
+  .Medicamento div button {
+    margin-top: 2.5%;
+    margin-right: 2.5%;
+    cursor: pointer;
+    
+  }
+
+  .excluir {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 10px;
+    background-color: gold; /* Cor do botão */
+    color: white; /* Cor do texto */
+    border: none; /* Remove bordas */
+    border-radius: 50px; /* Arredonda os cantos */
+    cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+  }
+

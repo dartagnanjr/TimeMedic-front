@@ -1,24 +1,26 @@
 import React from "react";
 import "./Pessoa.css"
-import Medicamentos from "./Medicamentos";
+import { useNavigate } from "react-router-dom";
+ 
 
-function getMedicamentos () {
+function Pessoa (props) {
+    const navigate = useNavigate(); // Hook para navegação
+
+    const onSubmitMedicamentos = () => {
+        navigate('/cadastrar-medicamentos', { state: { id: props.id }})
+    }
+    const onSubmitListaMedicamentos = () => {
+        navigate('/listar-medicamentos', { state: { id: props.id }})
+    }
     return (
-                <div>
-                    <main>
-                        <Medicamentos /> 
-                    </main> 
-                </div>
-           ) 
-}
-const Pessoa = (props) => (
-    <div className="Pessoa">
-        <h3>Nome: {props.nome} {props.sobre_nome} </h3>
-        <p> {props.key}</p>
-        <li><strong>Data de Nascimento</strong> {props.data_nascimento}</li>
-        <li><strong>Email</strong> {props.email}</li>
-        <button onClick={getMedicamentos}>Medicamentos</button>
+        <div className="Pessoa">
+        <h4>{props.nome} {props.sobre_nome} </h4>
+        <p>{props.email}</p>
+        <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
+        <button className="LstMedics" type="submit" onClick={onSubmitListaMedicamentos}>Listar Medicamentos</button>
     </div>
-);
+    )
+    
+};
 
 export default Pessoa;

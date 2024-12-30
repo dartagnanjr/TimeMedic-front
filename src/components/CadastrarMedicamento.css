@@ -1,0 +1,45 @@
+.CadastrarMedicamento {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    background-color: cadetblue;
+    margin-bottom: 2rem;
+    border: 1px solid violet;
+    padding: 20px;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 50%;
+    border-radius: 15px;
+    height: auto;
+    width: auto;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.CadastrarMedicamento h4 {
+   
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: gold;
+
+}
+
+.CadastrarMedicamento form label {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: gold;
+    margin-right: 15%;
+    
+}
+
+.CadastrarMedicamento form input {
+    text-align: left;
+    width: 70%;
+    margin-left: 15%;
+    margin-left: 20%;
+    background-color: whitesmoke;
+    
+}
+
+.CadastrarMedicamento form div button {
+    margin-top: 10px;
+    margin-left: 5%;
+
+}

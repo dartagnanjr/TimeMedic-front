@@ -1,4 +1,15 @@
 .App {
   padding: 0 30px;
-  
+  background-color: antiquewhite;
+}
+
+.App h1 {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: coral;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 150%;
 }

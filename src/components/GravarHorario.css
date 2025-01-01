@@ -1,14 +1,14 @@
 .GravarHorario {
     background-color: cadetblue;
     margin-bottom: 2rem;
-    border: 1px solid violet;
+    border: 2px solid violet;
     padding: 20px;
     margin-top: 10px;
     margin-left: 5%;
-    margin-right: 55%;
+    margin-right: 5%;
     border-radius: 15px;
     height: auto;
-    width: 250px;
+    width: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 

@@ -12,7 +12,7 @@ class Medicamentos extends Component {
 
     componentDidMount(){
         
-        fetch('http://localhost:3001/medicamentos', { method: 'GET'
+        fetch('http://192.168.0.152:3001/medicamentos', { method: 'GET'
          })
         .then(Response => {
             if (!Response.ok){

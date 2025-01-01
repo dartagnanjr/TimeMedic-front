@@ -9,7 +9,7 @@ function Pessoas() {
     const [pessoas, setPessoas] = useState([]);
 
   useEffect(() => {
-    const url = `http://localhost:3001/pessoas/${id}`
+    const url = `http://192.168.0.152:3001/pessoas/${id}`
     fetch(url, { 
         method: "GET",
         })

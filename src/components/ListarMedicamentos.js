@@ -8,9 +8,10 @@ function ListarMedicamentos (){
     const { id } = location.state || {};
 
     const [ medicamentos, setMedicamentos ] = useState([])
+   
 
     useEffect (()=> {
-        const url = `http://localhost:3001/medicamentos/pessoa/${id}`
+        const url = `http://192.168.0.152:3001/medicamentos/pessoa/${id}`
         fetch(url, { 
             method: "GET",
             })
@@ -38,7 +39,7 @@ function ListarMedicamentos (){
                         }
                         const resultado = response()
                         return {
-                            key: _medic.id,
+                            id: _medic.id,
                             nome: _medic.nome,
                             dosagem: _medic.dosagem,
                             prescricao: _medic.prescricao,
@@ -57,7 +58,7 @@ function ListarMedicamentos (){
     const removerMedicamento = (key) => {
         if (window.confirm`Tem certeza que deseja remover o medicamento ${key.nome} ?`) {
             const payLoad = { status: 1 }
-            fetch(`http://localhost:3001/medicamentos/${key.key}`, {
+            fetch(`http://192.168.0.152:3001/medicamentos/${key.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify(payLoad)
@@ -71,11 +72,14 @@ function ListarMedicamentos (){
             })
         }
     }
+
+    
+
     return (
         <div>
             {medicamentos.map(_medic => (
                     <Medicamento
-                        key={_medic.id}
+                        id={_medic.id}
                         nome={_medic.nome}
                         dosagem={_medic.dosagem}
                         prescricao={_medic.prescricao}
@@ -91,7 +95,7 @@ function ListarMedicamentos (){
                         removerMedicamento={() => removerMedicamento(_medic)}
                     />
                 ))}
-                
+            
         </div>
         
     )

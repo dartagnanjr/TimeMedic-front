@@ -12,7 +12,7 @@ function GravarHorario (props) {
 
         const horarios = { medicamento_id: id, horario_planejado: horario, status: 0 }
 
-        fetch('http://localhost:3001/horarios', {
+        fetch('http://192.168.0.152:3001/horarios', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(horarios),

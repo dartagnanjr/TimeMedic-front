@@ -17,7 +17,7 @@ function CadastrarMedicamento (props) {
 
         const medicamento = { nome, dosagem, prescricao, laboratorio, pessoa_id: id }
     
-        fetch('http://localhost:3001/medicamentos', {
+        fetch('http://192.168.0.152:3001/medicamentos', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(medicamento)
@@ -30,11 +30,11 @@ function CadastrarMedicamento (props) {
         } 
         )
         .then((dados) => {
-            if (dados === 'Validation error'){
+            if (dados === 'Validation error' || dados.created_at.length === 0 ){
                 alert(`Error: Medicamento ${medicamento.nome} já cadastrado.`)
                 return
             }
-            setNome('')
+            setNome('') 
             setDosagem('')
             setPrescricao('')
             setLaboratorio('')

@@ -12,7 +12,7 @@ function Autenticacao(props) {
 
     const pessoa = { email, password };
  
-    fetch('http://localhost:3001/auth', {
+    fetch('http://192.168.0.152:3001/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(pessoa),

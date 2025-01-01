@@ -8,7 +8,7 @@ const Horario = (props) => {
         event.preventDefault()
         const horario = { horarios_id: props.id }
 
-        fetch('http://localhost:3001/register', {
+        fetch('http://192.168.0.152:3001/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(horario)

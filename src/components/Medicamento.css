@@ -1,17 +1,17 @@
 .Medicamento {
     position: relative;
-    background-color: cadetblue;
+    background-color: rgb(198, 211, 211);
     margin-bottom: 2rem;
-    border: 1px solid violet;
+    border: 2px solid violet;
     padding: 20px;
     margin-top: 10px;
     margin-left: 5%;
-    margin-right: 55%;
+    margin-right: 5%;
     border-radius: 15px;
     height:auto;
-    width: 350px;
+    width: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: gold;  
+    color: blue;  
   }
 
   .Medicamento div button {
@@ -23,13 +23,13 @@
 
   .excluir {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 7px;
+    right: 7px;
     padding: 10px 10px;
-    background-color: gold; /* Cor do botão */
-    color: white; /* Cor do texto */
+    background-color:  rgb(198, 211, 211); /* Cor do botão */
+    color: black; /* Cor do texto */
     border: none; /* Remove bordas */
-    border-radius: 50px; /* Arredonda os cantos */
+    border-radius: 35px; /* Arredonda os cantos */
     cursor: pointer; /* Muda o cursor ao passar sobre o botão */
   }
 

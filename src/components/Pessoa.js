@@ -14,11 +14,10 @@ function Pessoa (props) {
     }
     return (
         <div className="Pessoa">
-        <h4>{props.nome} {props.sobre_nome} </h4>
-        <p>{props.email}</p>
-        <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
-        <button className="LstMedics" type="submit" onClick={onSubmitListaMedicamentos}>Listar Medicamentos</button>
-    </div>
+            <h4>{props.nome} {props.sobre_nome} <p>{props.email}</p></h4>
+            <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
+            <button className="LstMedics" type="submit" onClick={onSubmitListaMedicamentos}>Listar Medicamentos</button>
+        </div>
     )
     
 };

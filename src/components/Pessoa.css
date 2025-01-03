@@ -39,3 +39,14 @@
     margin-top: 2px;
     cursor: pointer;
 }
+
+.LstCompras {
+    border-radius: 5%;
+    font-family: inherit;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.Pessoa .list {
+    color: blue;
+}

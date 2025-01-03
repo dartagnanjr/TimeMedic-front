@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import icChecked from '../images/checked.png'
-
 
 const Horario = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);

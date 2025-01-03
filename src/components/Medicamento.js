@@ -3,6 +3,7 @@ import './Medicamento.css'
 import HorarioDiario from "./HorarioDiario";
 import { formatarData } from "../util/dates";
 import iClose from "../images/close.png"
+import iOlmMedo from "../images/e230d086-5130-41d9-8868-3dfb4eb15d28.png"
 
 
 const Medicamento = (props) => {
@@ -21,12 +22,10 @@ const Medicamento = (props) => {
         })
         .then(dados => {
             if (dados.length > 0) {
-                const response = dados[0].horarios_medicamentos.map(_dados => {
-
-                    return {
-                        horario: formatarData(_dados.created_at).fullDate()
-                    }
-                })
+                let response = []
+                dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
+                    response.push({horario: formatarData(_hora.created_at).fullDate() })
+                }) )
                 setListHorarios(response)
                 return
             } else {
@@ -38,8 +37,12 @@ const Medicamento = (props) => {
 
     return (
        <div className="Medicamento">
+            {/* <img src={iOlmMedo} alt="Button Icon" style={{ width: "100px", height: "100px", marginRight: "4px"}} >
+            </img> */}
             <ul>
-                <h3>Nome: {props.nome} </h3>
+                <h3>Nome: {props.nome} 
+                    
+                </h3>
                 <li>Dosagem: {props.dosagem}</li>
                 <li>Prescrição: {props.prescricao}</li>
                 <li>Laboratório: {props.laboratorio}</li>

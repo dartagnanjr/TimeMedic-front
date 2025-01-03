@@ -25,15 +25,13 @@
 .CadastrarMedicamento form label {
     font-family: inherit;
     color: blue;
-    margin-right: 15%;
+    margin-left: 5%;
     
 }
 
 .CadastrarMedicamento form input {
     text-align: left;
-    width: 70%;
-    margin-left: 15%;
-    margin-left: 20%;
+    padding: 0;
     background-color: whitesmoke;
     
 }

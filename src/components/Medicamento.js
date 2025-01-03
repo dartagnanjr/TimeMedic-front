@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './Medicamento.css'
 import HorarioDiario from "./HorarioDiario";
 import { formatarData } from "../util/dates";
+import iClose from "../images/close.png"
 
 
 const Medicamento = (props) => {
@@ -33,7 +34,6 @@ const Medicamento = (props) => {
                 return
             }
         })
-        
     }
 
     return (
@@ -45,7 +45,13 @@ const Medicamento = (props) => {
                 <li>Laboratório: {props.laboratorio}</li>
                 {props.horario_planejado}
                 <div>
-                    <button className="excluir" type="submit" onClick={props.removerMedicamento}>&times;</button>
+                    <button className="excluir" type="submit" onClick={props.removerMedicamento}>
+                        <img
+                            src={iClose}
+                            alt="Button Icon"
+                            style={{ width: "20px", height: "20px", marginRight: "4px" }}
+                        />    
+                    </button>
                     <button className="Listar" type="submit" onClick={listarDiarioMedicamento} >Listar diário</button>
                     <div>
                        {list_horarios.map(_horarios => (

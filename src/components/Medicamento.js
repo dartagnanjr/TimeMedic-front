@@ -3,7 +3,7 @@ import './Medicamento.css'
 import HorarioDiario from "./HorarioDiario";
 import { formatarData } from "../util/dates";
 import iClose from "../images/close.png"
-import iOlmMedo from "../images/e230d086-5130-41d9-8868-3dfb4eb15d28.png"
+
 
 
 const Medicamento = (props) => {

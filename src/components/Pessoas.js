@@ -6,7 +6,8 @@ import Pessoa from "./Pessoa";
 function Pessoas() {
     const location = useLocation();
     const { id } = location.state || {}; // Recupera o id do estado passado na navegação
-    const [pessoas, setPessoas] = useState([]);
+    const [ pessoas, setPessoas] = useState([]);
+    
 
   useEffect(() => {
     const url = `http://192.168.0.152:3001/pessoas/${id}`
@@ -35,7 +36,9 @@ function Pessoas() {
         })
         .catch((error) => console.error("Erro ao buscar pessoas:", error));
     
-  }, [id]); // O array vazio faz com que o useEffect seja executado apenas na montagem
+  }, []); // O array vazio faz com que o useEffect seja executado apenas na montagem
+
+    
 
   return (
     <div>

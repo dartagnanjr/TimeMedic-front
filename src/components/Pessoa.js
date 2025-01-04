@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Pessoa.css"
 import { useNavigate } from "react-router-dom";
 import ListaMedicamentos from "./ListaMedicamentos";
- 
+import myImage from "../images/dartagnan.jpg"
+import imAnalia from "../images/analia.jpeg"
 
 function Pessoa (props) {
+
     const navigate = useNavigate(); // Hook para navegação
     const [ medicamentos, setMedicamentos ] = useState([])
+    const [ image, setImage ] = useState([])
+
+    useEffect(() => {
+        if (props.nome === ('Francisco Dartagnan')){
+          setImage(myImage)
+        } else {
+          setImage(imAnalia)
+        }
+    }, [props])
 
     const onSubmitMedicamentos = () => {
         navigate('/cadastrar-medicamentos', { state: { id: props.id }})
@@ -38,6 +49,12 @@ function Pessoa (props) {
 
     return (
         <div className="Pessoa">
+            <img 
+                src={image}
+                alt="Button Icon"
+                style={{ width: "60px", height: "60px", marginRight: "5px", marginLeft: "5px"}}
+                        >
+            </img>
             <h4>{props.nome} {props.sobre_nome} <p>{props.email}</p></h4>
             <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
             <button className="LstMedics" type="submit" onClick={onSubmitListarMedicamentos}>Listar Medicamentos</button>

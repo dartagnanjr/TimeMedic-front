@@ -7,6 +7,7 @@ function CadastrarMedicamento (props) {
     const [ dosagem, setDosagem ] = useState('')
     const [ prescricao, setPrescricao ] = useState('')
     const [ laboratorio, setLaboratorio ] = useState('')
+    const [ quantidade, setQuantidade ] = useState('')
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = location.state || {};
@@ -15,7 +16,7 @@ function CadastrarMedicamento (props) {
     const onSubmitGravarMedicmentoHandler = (event) => {
         event.preventDefault();
 
-        const medicamento = { nome, dosagem, prescricao, laboratorio, pessoa_id: id }
+        const medicamento = { nome, dosagem, prescricao, laboratorio, quantidade_estoque: quantidade, pessoa_id: id }
     
         fetch('http://192.168.0.152:3001/medicamentos', {
             method: 'POST',
@@ -38,6 +39,7 @@ function CadastrarMedicamento (props) {
             setDosagem('')
             setPrescricao('')
             setLaboratorio('')
+            setQuantidade('')
             if (dados){
                 navigate('/gravar-horario', { state: { id: dados.id, nome: medicamento.nome } })
                 alert(`Medicamento ${medicamento.nome} gravado com sucesso.`)
@@ -62,6 +64,9 @@ function CadastrarMedicamento (props) {
                 </div>
                 <div >
                     <label>Laboratório: <input className="laboratorio" type="text" name="laboratorio" placeholder="Digite o laboratorio do remédio" value={laboratorio} onChange={(event) => setLaboratorio(event.target.value)} /> </label>
+                </div>
+                <div >
+                    <label>Qtde. Estoque: <input className="quantidade" type="text" name="quantidade" placeholder="Digite a quantidade do remédio em estoque" value={quantidade} onChange={(event) => setQuantidade(event.target.value)} /> </label>
                 </div>
                 <div>
                     <button type="submit">Gravar</button>

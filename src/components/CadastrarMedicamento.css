@@ -10,31 +10,18 @@
     height: auto;
     width: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.CadastrarMedicamento h4 {
-   
-    font-family: inherit;
     color: blue;
-
 }
 
-.CadastrarMedicamento form {
-    display: grid;
-    grid-template-columns: 150px 1fr; /* Coluna de 150px para labels, o resto para inputs */
-    gap: 10px 10px; /* Espaçamento entre linhas e colunas */
-    align-items: center; /* Alinha verticalmente no centro */
+.CadastrarMedicamento form button {
+    margin-top: 2.5%;
 }
 
-.CadastrarMedicamento form label {
-    font-family: inherit;
-    color: blue;
-    text-align: right;
-    
+.CadastrarMedicamento form div {
+    margin-top: 2%;
 }
 
-.CadastrarMedicamento form div button {
-    margin-top: 10px;
-    margin-left: 5%;
-
+.CadastrarMedicamento form input {
+    margin-left: 1%;
+    width: 300px;
 }

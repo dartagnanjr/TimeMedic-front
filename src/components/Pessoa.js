@@ -19,32 +19,41 @@ function Pessoa (props) {
         }
     }, [props])
 
-    const onSubmitMedicamentos = () => {
+    const onSubmitMedicamentos = (event) => {
+        event.preventDefault()
         navigate('/cadastrar-medicamentos', { state: { id: props.id }})
     }
-    const onSubmitListarMedicamentos = () => {
+    const onSubmitListarMedicamentos = (event) => {
+        event.preventDefault()
         navigate('/listar-medicamentos', { state: { id: props.id }})
     }
 
-    const onSubmitListaCompras = () => {
-        fetch(`http://192.168.0.152:3001/medicamentos/pessoa/${props.id}`, {
+    const onSubmitListaCompras = (event) => {
+        event.preventDefault()
+
+        if (!medicamentos.length) {
+            fetch(`http://192.168.0.152:3001/medicamentos/pessoa/${props.id}`, {
             method: 'GET'
-        }).then(_response => _response.json()
-        ).then(dados => {
-            if (dados.length){
-                const response = dados.map(_medic => {
-                    return {
-                        nome: _medic.nome,
-                        dosagem: _medic.dosagem,
-                        laboratorio: _medic.laboratorio
-                    }
-                })
-                setMedicamentos(response)
-                return
-            } else {
-                alert('Nenhum medicamento encontrado')
-            }
-        }).catch(err => {throw new Error(err)})
+            }).then(_response => _response.json()
+            ).then(dados => {
+                if (dados.length){
+                    const response = dados.map(_medic => {
+                        return {
+                            nome: _medic.nome,
+                            dosagem: _medic.dosagem,
+                            laboratorio: _medic.laboratorio
+                        }
+                    })
+                    setMedicamentos(response)
+                    return
+                } else {
+                    alert('Nenhum medicamento encontrado')
+                }
+            }).catch(err => {throw new Error(err)})
+        } else {
+            setMedicamentos([])
+        }
+        
     }
 
     return (

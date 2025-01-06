@@ -43,14 +43,12 @@ const Medicamento = (props) => {
             {/* <img src={iOlmMedo} alt="Button Icon" style={{ width: "100px", height: "100px", marginRight: "4px"}} >
             </img> */}
             <ul>
-                <h3>{props.nome} 
-                    
-                </h3>
+                <h3>{props.nome}</h3>
                 <li>Dosagem: {props.dosagem}</li>
                 <li>Prescrição: {props.prescricao}</li>
                 <li>Laboratório: {props.laboratorio}</li>
                 {props.quantidade_estoque}
-                {props.horario_planejado}
+                {props.horario_planejado} 
                 <div>
                     <button className="excluir" type="submit" onClick={props.removerMedicamento}>
                         <img

@@ -10,7 +10,6 @@ function ListarMedicamentos (){
 
     const [ medicamentos, setMedicamentos ] = useState([])
    
-
     useEffect (()=> {
         const url = `http://192.168.0.152:3001/medicamentos/pessoa/${id}`
         fetch(url, { 
@@ -75,7 +74,25 @@ function ListarMedicamentos (){
         }
     }
 
-    
+    const onRegistarHorarioMedicamento = (horario_id) => {
+        const horario = { horarios_id: horario_id }
+
+        fetch('http://192.168.0.152:3001/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(horario)
+        })
+        .then((result) => result.json())
+            .then((dados) => {
+              if (dados.id) {
+                //setIsDisabled(true);
+                alert(`Horário gravado com sucesso.`)
+              } else {
+                alert("Erro gravando o horário.");
+              }
+            })
+            .catch((error) => console.error("Erro gravando o horário: ", error));
+    }
 
     return (
         <div>
@@ -91,13 +108,16 @@ function ListarMedicamentos (){
                                 <Horario
                                     horario={_hora.horario_planejado}
                                     id={_hora.id}
+                                    registrarHorario={() => onRegistarHorarioMedicamento(_hora.id)}
                                 />
                             ))
                         }
+                        
                         quantidade_estoque={<Quantidade id={_medic.id} quantidade_estoque={_medic.quantidade_estoque} />}
                         removerMedicamento={() => removerMedicamento(_medic)}
                     />
                 ))}
+                
             
         </div>
         

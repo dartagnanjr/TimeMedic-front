@@ -1,3 +1,8 @@
 .novoHorario {
     width: 70px;
+
+}
+
+.Horario button {
+    font-size: small;
 }

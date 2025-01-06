@@ -20,27 +20,6 @@ const Horario = (props) => {
       })
     }, [])
 
-    const onClickRegistrar = (event) => {
-        event.preventDefault()
-        const horario = { horarios_id: props.id }
-
-        fetch('http://192.168.0.152:3001/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(horario)
-        })
-        .then((result) => result.json())
-            .then((dados) => {
-              if (dados.id) {
-                setIsDisabled(true);
-                alert(`Horário gravado com sucesso.`)
-              } else {
-                alert("Erro gravando o horário.");
-              }
-            })
-            .catch((error) => console.error("Erro gravando o horário: ", error));
-    }
-
     const onClickEditar = (event) => {
       event.preventDefault()
       setIsHidden(!ishidden)
@@ -48,7 +27,7 @@ const Horario = (props) => {
 
     const onClickSalvar = (event) => {
       event.preventDefault()
-      if (window.confirm`Tem certeza que deseja salvar o novo horário ${event.target.value} ?`){
+      if (window.confirm`Tem certeza que deseja salvar o novo horário ?`){
 
         const payLoad = { horario_planejado: nvhorario }
 
@@ -69,15 +48,12 @@ const Horario = (props) => {
     }
 
     return (
-        <div>
             <li>Horários: {horario} 
             <button style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
               <input className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
               <button type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
-              <button type="submit" onClick={onClickRegistrar} disabled={isDisabled}> Tomei agora </button>
+              <button type="submit" onClick={props.registrarHorario}> Tomei agora </button>
             </li> 
-            
-        </div>
     )
 }
 export default Horario

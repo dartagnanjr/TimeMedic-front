@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import '../components/Horario.css'
 
 const Horario = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [ ishidden, setIsHidden ] = useState(true);
   const [ horario, setHorario ] = useState(props.horario)
+  const [ nvhorario, setNvHorario ] = useState('00:00:00')
 
     useEffect(() => {
       fetch(`http://192.168.0.152:3001/medicamento/diario/${props.id}`, {
@@ -46,9 +48,9 @@ const Horario = (props) => {
 
     const onClickSalvar = (event) => {
       event.preventDefault()
-      if (window.confirm`Tem certeza que deseja salvar o novo horário ?`){
+      if (window.confirm`Tem certeza que deseja salvar o novo horário ${event.target.value} ?`){
 
-        const payLoad = { horario_planejado: horario }
+        const payLoad = { horario_planejado: nvhorario }
 
         fetch(`http://192.168.0.152:3001/horarios/${props.id}`, {
           method: 'PUT',
@@ -58,7 +60,7 @@ const Horario = (props) => {
           if (!result.ok) {
             alert('Problemas ao salvar o novo horário.', result.status )
           } else {
-            setHorario(horario)
+            setHorario(nvhorario)
             alert('Novo horário salvo com sucesso.')
             setIsHidden(true)
           }
@@ -69,8 +71,8 @@ const Horario = (props) => {
     return (
         <div>
             <li>Horários: {horario} 
-            <button style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar Horário </button>
-              <input hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={horario} onChange={(event) => setHorario(event.target.value)} ></input>
+            <button style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
+              <input className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
               <button type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
               <button type="submit" onClick={onClickRegistrar} disabled={isDisabled}> Tomei agora </button>
             </li> 

@@ -28,6 +28,7 @@ class Medicamentos extends Component {
                     dosagem: _medicamento.dosagem,
                     prescricao: _medicamento.prescricao,
                     laboratorio: _medicamento.laboratorio,
+                    quantidade_estoque: _medicamento.quantidade_estoque
                 }
             })
             this.setState({ medicamentos: result })
@@ -44,7 +45,8 @@ class Medicamentos extends Component {
                                 nome={_medicamento.nome}
                                 dosagem={_medicamento.dosagem}
                                 prescricao={_medicamento.prescricao}
-                                laboratorio={_medicamento.laboratorio}>
+                                laboratorio={_medicamento.laboratorio}
+                                quantidade_estoque={_medicamento.quantidade_estoque}>
                             </Medicamento>
                     ))}
             

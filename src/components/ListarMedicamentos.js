@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Medicamento from "./Medicamento";
 import { useLocation } from "react-router-dom";
 import Horario from "./Horario";
+import Quantidade from "./Quantidade";
 
 function ListarMedicamentos (){
     const location = useLocation();
@@ -44,6 +45,7 @@ function ListarMedicamentos (){
                             dosagem: _medic.dosagem,
                             prescricao: _medic.prescricao,
                             laboratorio: _medic.laboratorio,
+                            quantidade_estoque: _medic.quantidade_estoque,
                             horario_planejado: resultado 
                         }
                     })
@@ -92,6 +94,7 @@ function ListarMedicamentos (){
                                 />
                             ))
                         }
+                        quantidade_estoque={<Quantidade id={_medic.id} quantidade_estoque={_medic.quantidade_estoque} />}
                         removerMedicamento={() => removerMedicamento(_medic)}
                     />
                 ))}

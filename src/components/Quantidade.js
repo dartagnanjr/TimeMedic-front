@@ -51,6 +51,7 @@ const Quantidade = (props) => {
                 <input style={{ width: "35px", marginLeft: "0"}} hidden={ishidden} className="inputQtde" type="text" name="adicionar" placeholder="Digite novo horáio" value={vr} onChange={(event) => setVr(event.target.value)} />
                 <button type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button> 
             </li>
+            
     )
 }
 

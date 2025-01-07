@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Medicamento from "./Medicamento";
 import { useLocation } from "react-router-dom";
-import Horario from "./Horario";
+
 import Quantidade from "./Quantidade";
 
 function ListarMedicamentos (){
@@ -31,7 +31,8 @@ function ListarMedicamentos (){
                                 _medic.medicamentos_horarios.map(result => {
                                     return con.push({
                                         horario_planejado: result.horario_planejado,
-                                        id: result.id
+                                        id: result.id,
+                                        buttonEstado: false
                                     })
                                 })
                             }
@@ -74,25 +75,7 @@ function ListarMedicamentos (){
         }
     }
 
-    const onRegistarHorarioMedicamento = (horario_id) => {
-        const horario = { horarios_id: horario_id }
-
-        fetch('http://192.168.0.152:3001/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(horario)
-        })
-        .then((result) => result.json())
-            .then((dados) => {
-              if (dados.id) {
-                //setIsDisabled(true);
-                alert(`Horário gravado com sucesso.`)
-              } else {
-                alert("Erro gravando o horário.");
-              }
-            })
-            .catch((error) => console.error("Erro gravando o horário: ", error));
-    }
+    
 
     return (
         <div>
@@ -103,17 +86,8 @@ function ListarMedicamentos (){
                         dosagem={_medic.dosagem}
                         prescricao={_medic.prescricao}
                         laboratorio={_medic.laboratorio}
-                        horario_planejado={
-                            _medic.horario_planejado.map(_hora => (
-                                <Horario
-                                    horario={_hora.horario_planejado}
-                                    id={_hora.id}
-                                    registrarHorario={() => onRegistarHorarioMedicamento(_hora.id)}
-                                />
-                            ))
-                        }
-                        
-                        quantidade_estoque={<Quantidade id={_medic.id} quantidade_estoque={_medic.quantidade_estoque} />}
+                        horario_planejado={_medic.horario_planejado}
+                        quantidade_estoque={ { id: _medic.id, quantidade_estoque: _medic.quantidade_estoque } }
                         removerMedicamento={() => removerMedicamento(_medic)}
                     />
                 ))}

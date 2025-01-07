@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import '../components/Horario.css'
 
 const Horario = (props) => {
-  const [isDisabled, setIsDisabled] = useState(false);
   const [ ishidden, setIsHidden ] = useState(true);
   const [ horario, setHorario ] = useState(props.horario)
   const [ nvhorario, setNvHorario ] = useState('00:00:00')
+  const [ isDisable, setIsDisable ] = useState('')
 
-    useEffect(() => {
-      fetch(`http://192.168.0.152:3001/medicamento/diario/${props.id}`, {
-        method: 'GET'
-      })
-      .then(result => result.json()
-      )
-      .then(dados => {
-        if (dados !== 0 ){
-          setIsDisabled(true)
-        }
-      })
-    }, [])
-
-    const onClickEditar = (event) => {
+      const onClickEditar = (event) => {
       event.preventDefault()
       setIsHidden(!ishidden)
     }
@@ -52,7 +39,7 @@ const Horario = (props) => {
             <button style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
               <input className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
               <button type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
-              <button type="submit" onClick={props.registrarHorario}> Tomei agora </button>
+              <button type="submit" onClick={props.onButtonClick} disabled={props.isButtonDisabled}>  Tomei agora </button>
             </li> 
     )
 }

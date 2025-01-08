@@ -1,0 +1,19 @@
+.form-metricas{
+    border-radius: 5%;
+    background-color: rgb(198, 211, 211);
+    color: blue;
+    border: 0;
+}
+.buttonBioSalvar {
+    border-radius: 5%;
+    background-color: rgb(198, 211, 211);
+    color: blue;
+    border: 0;
+}
+
+.ValorBio {
+    border-radius: 5%;
+
+    color: blue;
+    border: 0;
+}

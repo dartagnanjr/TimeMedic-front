@@ -1,7 +1,7 @@
 .Pessoa {
     background-color: rgb(198, 211, 211);
     margin-bottom: 2rem;
-    border: 2px solid violet;
+    border: 2px solid red;
     padding: 15px;
     margin-top: 10px;
     margin-left: 5%;
@@ -28,6 +28,9 @@
 
 .btReg {
     border-radius: 5%;
+    background-color: rgb(198, 211, 211);
+    color: blue;
+    border: 0;
     font-family: inherit;
     margin-top: 2px;
     cursor: pointer;
@@ -35,15 +38,19 @@
 
 .LstMedics {
     border-radius: 5%;
+    background-color: rgb(198, 211, 211);
+    color: blue;
+    border: 0;
     font-family: inherit;
-    margin-top: 2px;
     cursor: pointer;
 }
 
 .LstCompras {
     border-radius: 5%;
+    background-color: rgb(198, 211, 211);
+    color: blue;
+    border: 0;
     font-family: inherit;
-    margin-top: 2px;
     cursor: pointer;
 }
 

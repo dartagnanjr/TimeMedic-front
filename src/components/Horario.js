@@ -36,10 +36,10 @@ const Horario = (props) => {
 
     return (
             <li>Horários: {horario} 
-            <button style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
+            <button className="button" style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
               <input className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
-              <button type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
-              <button type="submit" onClick={props.onButtonClick} disabled={props.isButtonDisabled}>  Tomei agora </button>
+              <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
+              <button className="button" type="submit" onClick={props.onButtonClick} disabled={props.isButtonDisabled}>  Tomei agora </button>
             </li> 
     )
 }

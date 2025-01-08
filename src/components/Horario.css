@@ -3,6 +3,9 @@
 
 }
 
-.Horario button {
+.button {
     font-size: small;
+    border: 0;
+    background-color: inherit;
+    color: blue;
 }

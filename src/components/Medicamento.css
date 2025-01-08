@@ -2,7 +2,7 @@
     position: relative;
     background-color: rgb(198, 211, 211);
     margin-bottom: 2rem;
-    border: 2px solid violet;
+    border: 2px solid red;
     padding: 0px;
     margin-top: 10px;
     margin-left: 5%;
@@ -20,6 +20,9 @@
     margin-right: 2.5%;
     cursor: pointer;
     font-size: inherit;
+    border: 0;
+    background-color: inherit;
+    color: blue;
   }
 
   .excluir {

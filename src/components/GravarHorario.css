@@ -1,7 +1,7 @@
 .GravarHorario {
     background-color: cadetblue;
     margin-bottom: 2rem;
-    border: 2px solid violet;
+    border: 2px solid red;
     padding: 20px;
     margin-top: 10px;
     margin-left: 5%;
@@ -28,4 +28,7 @@
 
 .GravarHorario form button {
     margin-top: 10px;
+    border: 0;
+    background-color: inherit;
+    color: blue;
 }

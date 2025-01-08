@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ListaMedicamentos from "./ListaMedicamentos";
 import myImage from "../images/dartagnan.jpg"
 import imAnalia from "../images/analia.jpeg"
+import Biometria from "./Biometria"
 
 function Pessoa (props) {
 
@@ -77,8 +78,12 @@ function Pessoa (props) {
                     />
                 ))}
             </div>
+            <div>
+                <Biometria pessoa_id={props.id} />
+            </div>
             
         </div>
+        
     )
     
 };

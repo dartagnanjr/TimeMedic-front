@@ -1,6 +1,6 @@
 .Medicamento {
     position: relative;
-    background-color: rgb(198, 211, 211);
+    background-color: rgb(186, 211, 211);
     margin-bottom: 2rem;
     border: 2px solid red;
     padding: 0px;
@@ -12,17 +12,7 @@
     width: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: small;
-    color: blue;  
-  }
-
-  .Medicamento div button {
-    margin-top: 2.5%;
-    margin-right: 2.5%;
-    cursor: pointer;
-    font-size: inherit;
-    border: 0;
-    background-color: inherit;
-    color: blue;
+    color: rgb(30, 30, 34);  
   }
 
   .excluir {
@@ -37,3 +27,9 @@
     cursor: pointer; /* Muda o cursor ao passar sobre o botão */
   }
 
+.button {
+  cursor: pointer;
+  font-size: inherit;
+  border: 5px;
+  color: rgb(30, 30, 34);
+}

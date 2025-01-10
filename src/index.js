@@ -4,7 +4,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import reportWebVitals from './reportWebVitals';
 import Autenticacao from './components/Autenticacao';
-import Pessoas from './components/Pessoas'
+import Pessoa from './components/Pessoa'
 import CadastrarMedicamento from './components/CadastrarMedicamento'
 import GravarHorario from './components/GravarHorario'
 import ListarMedicamentos from './components/ListarMedicamentos';
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/pessoas',
-    element: <Pessoas/>
+    element: <Pessoa/>
   },
   {
     path: '/cadastrar-medicamentos',

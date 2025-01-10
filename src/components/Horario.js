@@ -5,7 +5,7 @@ const Horario = (props) => {
   const [ ishidden, setIsHidden ] = useState(true);
   const [ horario, setHorario ] = useState(props.horario)
   const [ nvhorario, setNvHorario ] = useState('00:00:00')
-  const [ isDisable, setIsDisable ] = useState('')
+
 
       const onClickEditar = (event) => {
       event.preventDefault()

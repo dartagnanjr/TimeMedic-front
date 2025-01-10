@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './CadastrarMedicamento.css'
+import GravarHorario from "./GravarHorario"
 
 function CadastrarMedicamento (props) {
     const [ nome, setNome ] = useState('')
@@ -72,6 +73,7 @@ function CadastrarMedicamento (props) {
                     <button type="submit">Gravar</button>
                 </div>
             </form>
+           
         </div>
     )
 }

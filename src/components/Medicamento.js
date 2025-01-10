@@ -19,7 +19,7 @@ const Medicamento = (props) => {
         .then(result => result.json()
         )
         .then(dados => {
-            if (dados !== 0 ){
+            if (dados){
               setIsDisable(true);
             }
         })

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Pessoa.css"
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ListaMedicamentos from "./ListaMedicamentos";
 import myImage from "../images/dartagnan.jpg"
@@ -8,9 +9,41 @@ import Biometria from "./Biometria"
 
 function Pessoa (props) {
 
+    const location = useLocation();
+    const { id } = location.state || {}; // Recupera o id do estado passado na navegação
     const navigate = useNavigate(); // Hook para navegação
     const [ medicamentos, setMedicamentos ] = useState([])
     const [ image, setImage ] = useState([])
+    const [ pessoas, setPessoas] = useState([]);
+
+    useEffect(() => {
+        const url = `http://192.168.0.152:3001/pessoas/${id}`
+        fetch(url, { 
+            method: "GET",
+            })
+            .then((response) => {
+                if (!response.ok) {
+                throw new Error(`Erro: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((dados) => {
+                if (dados) {
+                    const result = {
+                        id: dados.id,
+                        nome: dados.nome,
+                        sobre_nome: dados.sobre_nome,
+                        data_nascimento: dados.data_nascimento,
+                        email: dados.email
+                    } 
+                    setPessoas(result);
+                } else {
+                    throw new Error('Nenhum registro encontrado.')
+                }
+            })
+            .catch((error) => console.error("Erro ao buscar pessoas:", error));
+        
+      }, []); 
 
     useEffect(() => {
         if (props.nome === ('Francisco Dartagnan')){
@@ -65,7 +98,7 @@ function Pessoa (props) {
                 style={{ width: "60px", height: "60px", marginRight: "5px", marginLeft: "5px"}}
                         >
             </img>
-            <h4>{props.nome} {props.sobre_nome} <p>{props.email}</p></h4>
+            <h4>{pessoas.nome} {pessoas.sobre_nome} <p>{pessoas.email}</p></h4>
             <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
             <button className="LstMedics" type="submit" onClick={onSubmitListarMedicamentos}>Listar Medicamentos</button>
             <button className="LstCompras" type="submit" onClick={onSubmitListaCompras}>Lista de Compras</button>

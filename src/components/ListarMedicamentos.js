@@ -32,7 +32,7 @@ function ListarMedicamentos (){
                                     return con.push({
                                         horario_planejado: result.horario_planejado,
                                         id: result.id,
-                                        buttonEstado: false
+                                        buttonDisabled: false
                                     })
                                 })
                             }

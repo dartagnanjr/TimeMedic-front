@@ -36,7 +36,7 @@ function Pessoas() {
         })
         .catch((error) => console.error("Erro ao buscar pessoas:", error));
     
-  }, []); // O array vazio faz com que o useEffect seja executado apenas na montagem
+  }, []); 
 
     
 

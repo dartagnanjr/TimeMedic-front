@@ -46,27 +46,27 @@ function Pessoa (props) {
       }, []); 
 
     useEffect(() => {
-        if (props.nome === ('Francisco Dartagnan')){
+        if (pessoas.nome === ('Francisco Dartagnan')){
           setImage(myImage)
         } else {
           setImage(imAnalia)
         }
-    }, [props])
+    }, [pessoas])
 
     const onSubmitMedicamentos = (event) => {
         event.preventDefault()
-        navigate('/cadastrar-medicamentos', { state: { id: props.id }})
+        navigate('/cadastrar-medicamentos', { state: { id: id }})
     }
     const onSubmitListarMedicamentos = (event) => {
         event.preventDefault()
-        navigate('/listar-medicamentos', { state: { id: props.id }})
+        navigate('/listar-medicamentos', { state: { id: id }})
     }
 
     const onSubmitListaCompras = (event) => {
         event.preventDefault()
 
         if (!medicamentos.length) {
-            fetch(`http://192.168.0.152:3001/medicamentos/pessoa/${props.id}`, {
+            fetch(`http://192.168.0.152:3001/medicamentos/pessoa/${id}`, {
             method: 'GET'
             }).then(_response => _response.json()
             ).then(dados => {

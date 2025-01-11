@@ -1,5 +1,5 @@
 .Pessoa {
-    background-color: rgb(198, 211, 211);
+    background-color: rgb(186, 211, 211);
     margin-bottom: 2rem;
     border: 2px solid red;
     padding: 15px;
@@ -14,22 +14,23 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+    color: rgb(30, 30, 34);  
 }
 
 .Pessoa h4 {
     padding: 0;
-    color: blue;
+    color: rgb(30, 30, 34);  
 }
 
 .Pessoa p {
     padding: 0%;
-    color: blue;
+    color: rgb(30, 30, 34);  
 }
 
 .btReg {
     border-radius: 5%;
     background-color: rgb(198, 211, 211);
-    color: blue;
+    color: rgb(30, 30, 34);  
     border: 0;
     font-family: inherit;
     margin-top: 2px;
@@ -39,7 +40,7 @@
 .LstMedics {
     border-radius: 5%;
     background-color: rgb(198, 211, 211);
-    color: blue;
+    color: rgb(30, 30, 34);  
     border: 0;
     font-family: inherit;
     cursor: pointer;
@@ -48,12 +49,12 @@
 .LstCompras {
     border-radius: 5%;
     background-color: rgb(198, 211, 211);
-    color: blue;
+    color: rgb(30, 30, 34);  
     border: 0;
     font-family: inherit;
     cursor: pointer;
 }
 
 .Pessoa .list {
-    color: blue;
+    color: rgb(30, 30, 34);  
 }

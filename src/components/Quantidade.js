@@ -48,7 +48,7 @@ const Quantidade = (props) => {
     return (
             <li>Estoque: {qtde}
                 <button className="button" style={{marginLeft: "10px"}} type="submit" onClick={onClickAdicionar} >Adicionar </button>
-                <input style={{ width: "35px", marginLeft: "0"}} hidden={ishidden} className="inputQtde" type="text" name="adicionar" placeholder="Digite novo horáio" value={vr} onChange={(event) => setVr(event.target.value)} />
+                <input style={{ width: "35px", marginLeft: "0", border: "0"}} hidden={ishidden} className="inputQtde" type="text" name="adicionar" placeholder="Digite novo horáio" value={vr} onChange={(event) => setVr(event.target.value)} />
                 <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button> 
             </li>
             

@@ -26,7 +26,7 @@ const Medicamento = (props) => {
                 if (dados){
                     const result = dados.map(_hora => {
                         return {
-                            buttonDisabled: _hora.buttonEstado = true,
+                            buttonDisabled: true,
                             id: _hora.id,
                             horario_planejado: _hora.horario_planejado
                         } 
@@ -84,7 +84,13 @@ const Medicamento = (props) => {
                 const result = horarioPlanejado.map(_hora => {
                     if (_hora.id == horarios_id) {
                         return {
-                            buttonDisabled: _hora.buttonEstado = true,
+                            buttonDisabled: true,
+                            id: _hora.id,
+                            horario_planejado: _hora.horario_planejado
+                       } 
+                    } else {
+                        return {
+                            buttonDisabled: _hora.buttonDisabled,
                             id: _hora.id,
                             horario_planejado: _hora.horario_planejado
                        } 
@@ -132,7 +138,7 @@ const Medicamento = (props) => {
                 <li>Dosagem: {props.dosagem}</li>
                 <li>Prescrição: {props.prescricao}</li>
                 <li>Laboratório: {props.laboratorio}</li>
-                <Quantidade id={id} quantidade_estoque={quantidade_estoque} />
+                <Quantidade id={props.id} quantidade_estoque={quantidade_estoque} />
                 {horarioPlanejado.map(_hora => (
                     <li>Horário: {_hora.horario_planejado} 
                         <button className="button" style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>

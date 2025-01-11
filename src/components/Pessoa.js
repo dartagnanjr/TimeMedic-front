@@ -112,7 +112,7 @@ function Pessoa (props) {
                 ))}
             </div>
             <div>
-                <Biometria pessoa_id={props.id} />
+                <Biometria pessoa_id={id} />
             </div>
             
         </div>

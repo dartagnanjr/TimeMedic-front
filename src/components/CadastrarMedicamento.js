@@ -12,6 +12,7 @@ function CadastrarMedicamento (props) {
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = location.state || {};
+    const [ teste, setTeste ] = useState(false)
 
 
     const onSubmitGravarMedicmentoHandler = (event) => {
@@ -42,6 +43,7 @@ function CadastrarMedicamento (props) {
             setLaboratorio('')
             setQuantidade('')
             if (dados){
+                //setTeste(true)
                 navigate('/gravar-horario', { state: { id: dados.id, nome: medicamento.nome } })
                 alert(`Medicamento ${medicamento.nome} gravado com sucesso.`)
             } else {
@@ -73,6 +75,14 @@ function CadastrarMedicamento (props) {
                     <button type="submit">Gravar</button>
                 </div>
             </form>
+            <div>
+                {() => {
+                    if (teste) {
+                        <h4>Testando...</h4>
+                    }
+                    }
+                }
+            </div>
            
         </div>
     )

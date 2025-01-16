@@ -15,36 +15,18 @@ const Medicamento = (props) => {
     //const [ medicamentos, setMedicamentos ] = useState(props.medicamentos.medicamentos)
     const [ horarioPlanejado , setHorarioPlanejado ] = useState(props.horario_planejado)
     
-    const atulizaHorarios = (dados) => {
-
-        const result = horarioPlanejado.map(_hora => {
-            if (_hora.id === dados.id) {
-                console.log(_hora.id, ',', dados.id)
-                return {
-                    buttonDisabled: true,
-                    id: _hora.id,
-                    horario_planejado: _hora.horario_planejado
-               } 
-            } else {
-                return {
-                    buttonDisabled: _hora.buttonDisabled,
-                    id: _hora.id,
-                    horario_planejado: _hora.horario_planejado
-               } 
-            }
-        })
-        setHorarioPlanejado(result)
-    }
-
     useEffect(() => {
-
         api.get('/medicamentos/', { id: props.id })
         .then(result => {
             if (!result.ok) { throw new Error('Problemas no retorno da API')}
             else { return result.json()}
         }).then(dados => {
-            if (dados) {
-                atulizaHorarios(dados)
+            if (dados.length > 0) {
+                let response = []
+                dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
+                    response.push({horario: formatarData(_hora.created_at).fullDate() })
+                }) )
+                setListHorarios(response)
                 return
             } else {
                 alert('Nenhum registro encontrado.')
@@ -53,7 +35,7 @@ const Medicamento = (props) => {
         })
 
     }, [])
-
+    
     const listarDiarioMedicamento = (event) => {
         //event.preventDefault()
 
@@ -67,22 +49,17 @@ const Medicamento = (props) => {
                 }
             })
             .then(dados => {
-                const result = horarioPlanejado.map(_hora => {
-                    if (_hora.id === dados.id) {
-                        return {
-                            buttonDisabled: true,
-                            id: _hora.id,
-                            horario_planejado: _hora.horario_planejado
-                       } 
-                    } else {
-                        return {
-                            buttonDisabled: _hora.buttonDisabled,
-                            id: _hora.id,
-                            horario_planejado: _hora.horario_planejado
-                       } 
-                    }
-                })
-                setHorarioPlanejado(result)
+                if (dados.length > 0) {
+                    let response = []
+                    dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
+                        response.push({horario: formatarData(_hora.created_at).fullDate() })
+                    }) )
+                    setListHorarios(response)
+                    return
+                } else {
+                    alert('Nenhum registro encontrado.')
+                    return
+                }
             })
         } else {
             setListHorarios([])

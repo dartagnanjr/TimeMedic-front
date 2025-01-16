@@ -1,44 +1,35 @@
 .Medicamento {
     position: relative;
-    background-color: rgb(186, 211, 211);
-    margin-bottom: 2rem;
-    border: 2px solid red;
-    padding: 0px;
-    margin-top: 10px;
-    margin-left: 5%;
-    margin-right: 5%;
-    border-radius: 15px;
-    height:auto;
-    width: auto;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: small;
-    color: rgb(30, 30, 34);  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid blue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
   }
 
-  .Medicamento li {
-    padding-top: 5px;
-  }
+  
 
   .excluir {
-    position: absolute;
+    position: relative;
     top: 7px;
     right: 7px;
-    padding: 10px 10px;
-    background-color:  rgb(198, 211, 211); /* Cor do botão */
+    padding: 1.5px 1.5px;
     color: black; /* Cor do texto */
     border: none; /* Remove bordas */
     border-radius: 35px; /* Arredonda os cantos */
     cursor: pointer; /* Muda o cursor ao passar sobre o botão */
   }
 
-.button {
+/* .button {
   cursor: pointer;
   font-size: inherit;
   border: 5px;
   color: rgb(30, 30, 34);
-  margin-left: 5px;
-  margin-right: 5px;
-}
+  background-color: inherit;
+
+} */
 
 .buttonListar {
   cursor: pointer;
@@ -46,13 +37,30 @@
   border: 5px;
   color: rgb(30, 30, 34);
   margin-top: 10px;
+  background-color: beige;
 
 }
 
 .novoHorario {
   width: 60px;
-  margin-left: 5px;
+  margin-left: 15px;
   margin-right: 5px;
   border: 0;
   text-align: center;
 }
+
+
+  .medics {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 20px;
+    margin-top: 3%;
+    padding: 10px;
+    border: 2px solid rgb(75, 145, 129);
+    width: 500px;
+    
+  }
+
+

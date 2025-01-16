@@ -1,0 +1,10 @@
+.table {
+    width: 100%;
+}
+.tit {
+    width: 35px;
+}
+
+.tr td {
+    margin-left: 10px;
+}

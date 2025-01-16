@@ -1,0 +1,14 @@
+.div_principal {
+    background-color: rgb(186, 211, 211);
+    margin-bottom: 2rem;
+    border: 2px solid red;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 15px;
+    height:auto;
+    width: auto;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: small;
+    color: rgb(30, 30, 34); 
+}

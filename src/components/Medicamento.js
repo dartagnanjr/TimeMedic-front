@@ -1,44 +1,61 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import './Medicamento.css'
-import { formatarData } from "../util/dates";
+import { formatarData } from '../util/dates'
 import iClose from "../images/close.png"
 import Quantidade from "./Quantidade";
+import MyButton from "../hooks/MyButton";
+import api from '../services/api'
 
 const Medicamento = (props) => {
     const [ list_horarios, setListHorarios ] = useState([])
-    const [ id, setId ] = useState(props.quantidade_estoque.id)
     const [ quantidade_estoque, setQuantidadeEstoque ] = useState(props.quantidade_estoque.quantidade_estoque)
     const [ ishidden, setIsHidden ] = useState(true);
     const [ nvhorario, setNvHorario ] = useState('00:00:00')
     const [ horario, setHorario ] = useState(props.horario)
+    //const [ medicamentos, setMedicamentos ] = useState(props.medicamentos.medicamentos)
     const [ horarioPlanejado , setHorarioPlanejado ] = useState(props.horario_planejado)
     
+    const atulizaHorarios = (dados) => {
+
+        const result = horarioPlanejado.map(_hora => {
+            if (_hora.id === dados.id) {
+                console.log(_hora.id, ',', dados.id)
+                return {
+                    buttonDisabled: true,
+                    id: _hora.id,
+                    horario_planejado: _hora.horario_planejado
+               } 
+            } else {
+                return {
+                    buttonDisabled: _hora.buttonDisabled,
+                    id: _hora.id,
+                    horario_planejado: _hora.horario_planejado
+               } 
+            }
+        })
+        setHorarioPlanejado(result)
+    }
+
     useEffect(() => {
-        
-       
-        fetch(`http://192.168.0.152:3001/medicamento/diario/${props.id}`, {
-            method: 'GET'
-            })
-            .then(result => result.json()
-            )
-            .then(dados => {
-                console.log(dados)
-                if (dados){
-                    const result = dados.map(_hora => {
-                        return {
-                            buttonDisabled: true,
-                            id: _hora.id,
-                            horario_planejado: _hora.horario_planejado
-                        } 
-                    })
-                    setHorarioPlanejado(result)
-                } 
-            })
-        
+
+        api.get('/medicamentos/', { id: props.id })
+        .then(result => {
+            if (!result.ok) { throw new Error('Problemas no retorno da API')}
+            else { return result.json()}
+        }).then(dados => {
+            if (dados) {
+                atulizaHorarios(dados)
+                return
+            } else {
+                alert('Nenhum registro encontrado.')
+                return
+            }
+        })
+
     }, [])
 
     const listarDiarioMedicamento = (event) => {
-        event.preventDefault()
+        //event.preventDefault()
 
         if (!list_horarios.length) {
             fetch(`http://192.168.0.152:3001/medicamentos/diario/${props.id}`, {
@@ -50,17 +67,22 @@ const Medicamento = (props) => {
                 }
             })
             .then(dados => {
-                if (dados.length > 0) {
-                    let response = []
-                    dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
-                        response.push({horario: formatarData(_hora.created_at).fullDate() })
-                    }) )
-                    setListHorarios(response)
-                    return
-                } else {
-                    alert('Nenhum registro encontrado.')
-                    return
-                }
+                const result = horarioPlanejado.map(_hora => {
+                    if (_hora.id === dados.id) {
+                        return {
+                            buttonDisabled: true,
+                            id: _hora.id,
+                            horario_planejado: _hora.horario_planejado
+                       } 
+                    } else {
+                        return {
+                            buttonDisabled: _hora.buttonDisabled,
+                            id: _hora.id,
+                            horario_planejado: _hora.horario_planejado
+                       } 
+                    }
+                })
+                setHorarioPlanejado(result)
             })
         } else {
             setListHorarios([])
@@ -82,7 +104,7 @@ const Medicamento = (props) => {
                 let qtde = quantidade_estoque - 1
                 setQuantidadeEstoque(qtde)
                 const result = horarioPlanejado.map(_hora => {
-                    if (_hora.id == horarios_id) {
+                    if (_hora.id === horarios_id) {
                         return {
                             buttonDisabled: true,
                             id: _hora.id,
@@ -105,12 +127,25 @@ const Medicamento = (props) => {
             .catch((error) => console.error("Erro gravando o horário: ", error));
         
     }
+    const montarComponente = (horarioPlanejado) => {
+        const retorno = horarioPlanejado.map(_hora => (
+            <tr>
+                <td >{_hora.horario_planejado}</td>
+                <td>
+                    <MyButton className="button" onClick={onClickEditar} hidden={ishidden} >Alterar</MyButton>
+                    <input  className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
+                    <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
+                    <button className="button" type="submit" value={_hora.id} onClick={(event) => onRegistarHorarioMedicacao(event.target.value)} hidden={_hora.buttonDisabled}>  Tomei agora </button>
+                </td>
+            </tr>
+        ))
+        return retorno
+    }
+
     const onClickEditar = (event) => {
-        event.preventDefault()
         setIsHidden(!ishidden)
       }
       const onClickSalvar = (event) => {
-        event.preventDefault()
         if (window.confirm`Tem certeza que deseja salvar o novo horário ?`){
   
           const payLoad = { horario_planejado: nvhorario }
@@ -131,43 +166,76 @@ const Medicamento = (props) => {
         }
       }
     return (
-       <div className="Medicamento">
-            
-            <ul>
-                <h3>{props.nome}</h3>
-                <li>Dosagem: {props.dosagem}</li>
-                <li>Prescrição: {props.prescricao}</li>
-                <li>Laboratório: {props.laboratorio}</li>
-                <Quantidade id={props.id} quantidade_estoque={quantidade_estoque} />
-                {horarioPlanejado.map(_hora => (
-                    <li>Horário: {_hora.horario_planejado} 
-                        <button className="button" style={{marginLeft: "10px"}} type="submit" onClick={onClickEditar}>Alterar</button>
-                        <input  className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
-                        <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
-                        <button className="button" type="submit" value={_hora.id} onClick={(event) => onRegistarHorarioMedicacao(event.target.value)} disabled={_hora.buttonDisabled}>  Tomei agora </button>
-  
-                    </li>
-                ))} 
-                <div>
-                    <button className="excluir" type="submit" onClick={props.removerMedicamento}>
+        <div className="medics">
+            {/* <div className="bt_excluir">
+                <button className="excluir" type="submit" onClick={props.removerMedicamento}>
                         <img
                             src={iClose}
                             alt="Button Icon"
                             style={{ width: "20px", height: "20px", marginRight: "4px" }}
                         />    
                     </button>
-                    <button className="buttonListar" type="submit" onClick={listarDiarioMedicamento} >Listar diário</button>
-                    <div>
-                       {list_horarios.map(_horarios => (
-                        <li>
-                            Horário: {_horarios.horario}
-                        </li>
-                        ))} 
+            </div> */}
+            <div>
+                <section>
+                    <div align="center">
+                        <td><strong>{props.nome}</strong> {props.dosagem}</td>
+                        <td> - ({props.laboratorio})</td>
                     </div>
-                    
-                </div>
-            </ul>
-        </div> 
+                    <div align="center">
+                        <td>{props.prescricao}</td>
+                    </div>
+                </section>
+            </div>
+            <table align="center">
+               
+                <tr>
+                    <td>Estoque:</td>
+                    <Quantidade id={props.id} quantidade_estoque={quantidade_estoque}/>
+                </tr>
+                <tr>
+                    <td>Horário:</td>
+                    {montarComponente(horarioPlanejado)}
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        
+    //    <div className="Medicamento">
+    //         <table>
+                
+    //             {montaTabelaMedicamentos(medicamentos)}
+    //             {
+    //                  Object.entries(medicamentos).map(_medics => {
+    //                     <tr>
+    //                         <td><h5>{medicamentos.nome}</h5></td>
+    //                         <td>{medicamentos.dosagem}</td>
+    //                         <td>{medicamentos.prescricao}</td>
+    //                         <td>{medicamentos.laboratorio}</td>
+    //                         <Quantidade id={props.id} quantidade_estoque={quantidade_estoque}/>
+    //                         {montarComponente(horarioPlanejado)}
+    //                     </tr>
+                       
+    //                 })
+    //             }
+                
+    //         </table>
+            
+    //         <div>
+    //            
+    //             <MyButton className="button" onClick={listarDiarioMedicamento}>Listar Diário</MyButton>
+    //             <div>
+    //                 {list_horarios.map(_horarios => (
+    //                 <li>
+    //                     Horário: {_horarios.horario}
+    //                 </li>
+    //                 ))} 
+    //             </div>
+                
+    //         </div>
+    //     </div> 
     )
     
 };

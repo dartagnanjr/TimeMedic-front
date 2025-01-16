@@ -1,62 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Medicamento from "./Medicamento";
 import { useLocation } from "react-router-dom";
+//import useMedicamentos from "../hooks/useMedicamentos";
+import './ListaMedicamentos.css'
 
-import Quantidade from "./Quantidade";
-
-function ListarMedicamentos (){
+function ListarMedicamentos (props){
     const location = useLocation();
-    const { id } = location.state || {};
-
-    const [ medicamentos, setMedicamentos ] = useState([])
-   
-    useEffect (()=> {
-        const url = `http://192.168.0.152:3001/medicamentos/pessoa/${id}`
-        fetch(url, { 
-            method: "GET",
-            })
-            .then((response) => {
-                if (!response.ok) {
-                throw new Error(`Erro: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((dados) => {
-                if (dados) {
-                    const result = dados.map((_medic) =>{
-
-                        function response () {
-                            let con = [];
-                            if (Array.isArray(_medic.medicamentos_horarios)){
-                                _medic.medicamentos_horarios.map(result => {
-                                    return con.push({
-                                        horario_planejado: result.horario_planejado,
-                                        id: result.id,
-                                        buttonDisabled: false
-                                    })
-                                })
-                            }
-                            return con
-                        }
-                        const resultado = response()
-                        return {
-                            id: _medic.id,
-                            nome: _medic.nome,
-                            dosagem: _medic.dosagem,
-                            prescricao: _medic.prescricao,
-                            laboratorio: _medic.laboratorio,
-                            quantidade_estoque: _medic.quantidade_estoque,
-                            horario_planejado: resultado 
-                        }
-                    })
-                    setMedicamentos(result);
-                } else {
-                    throw new Error('Nenhum registro encontrado.')
-                }
-            })
-            .catch((error) => console.error("Erro ao buscar pessoas:", error));
-    }, [id])
-
+    const { id, medicamentos } = location.state || {};
+      
     const removerMedicamento = (key) => {
         if (window.confirm`Tem certeza que deseja remover o medicamento ${key.nome} ?`) {
             const payLoad = { status: 1 }
@@ -66,8 +17,8 @@ function ListarMedicamentos (){
                 body: JSON.stringify(payLoad)
             }).then(result => {
                 if (result.ok) {
-                    let medic = medicamentos.filter(m => m !== key)
-                    setMedicamentos(medic)
+                    //let medic = medicamentos.filter(m => m !== key)
+                    //setListMedicamentos(medic)
                     alert(`Medicamento ${key.nome } excluido com sucesso. `)
                     return payLoad.id
                 } 
@@ -76,23 +27,21 @@ function ListarMedicamentos (){
     }
 
     
-
     return (
-        <div>
+        <div align="center">
             {medicamentos.map(_medic => (
-                    <Medicamento
-                        id={_medic.id}
-                        nome={_medic.nome}
-                        dosagem={_medic.dosagem}
-                        prescricao={_medic.prescricao}
-                        laboratorio={_medic.laboratorio}
-                        horario_planejado={_medic.horario_planejado}
-                        quantidade_estoque={ { id: _medic.id, quantidade_estoque: _medic.quantidade_estoque } }
-                        removerMedicamento={() => removerMedicamento(_medic)}
-                    />
-                ))}
-                
-            
+                <Medicamento
+                    id={_medic.id}
+                    nome={_medic.nome}
+                    dosagem={_medic.dosagem}
+                    prescricao={_medic.prescricao}
+                    laboratorio={_medic.laboratorio}
+                    horario_planejado={_medic.medicamentos_horarios}
+                    quantidade_estoque={ { id: _medic.id, quantidade_estoque: _medic.quantidade_estoque } }
+                    removerMedicamento={() => removerMedicamento(_medic)}
+                />
+            ))}
+
         </div>
         
     )

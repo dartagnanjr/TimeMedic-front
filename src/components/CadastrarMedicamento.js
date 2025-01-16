@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import './CadastrarMedicamento.css'
-import GravarHorario from "./GravarHorario"
 
 function CadastrarMedicamento (props) {
     const [ nome, setNome ] = useState('')
@@ -12,7 +11,9 @@ function CadastrarMedicamento (props) {
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = location.state || {};
-    const [ teste, setTeste ] = useState(false)
+    const [ ishidden, setIsHidden ] = useState(true)
+    const [ horario, setHorario ] = useState('')
+    const [ novo_id, setNovoId ] = useState('')
 
 
     const onSubmitGravarMedicmentoHandler = (event) => {
@@ -24,32 +25,73 @@ function CadastrarMedicamento (props) {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(medicamento)
-        })
-        .then((result) => {
+        }).then((result) => {
             if (!result.ok){
                 alert('Error ao cadastrar medicamentos. ', result.status)
+                return
+            } else {
+                return result.json()
             }
-            return result.json()
-        } 
-        )
-        .then((dados) => {
-            if (dados === 'Validation error' || dados.created_at.length === 0 ){
+        }).then((dados) => {
+            if (!dados){
                 alert(`Error: Medicamento ${medicamento.nome} já cadastrado.`)
                 return
             }
-            setNome('') 
-            setDosagem('')
-            setPrescricao('')
-            setLaboratorio('')
-            setQuantidade('')
             if (dados){
-                //setTeste(true)
-                navigate('/gravar-horario', { state: { id: dados.id, nome: medicamento.nome } })
+                //setNome('') 
+                setDosagem('')
+                setPrescricao('')
+                setLaboratorio('')
+                setQuantidade('')
+                setIsHidden(false)
+                setNovoId(dados.id)
                 alert(`Medicamento ${medicamento.nome} gravado com sucesso.`)
+                //navigate('/gravar-horario', { state: { id: dados.id, nome: medicamento.nome } })
+                
             } else {
                 throw new Error('Problemas ao cadastrar remédio, tente novamente.')
             }
         })
+        
+    }
+
+    const onSubmitGravarHorarioHandler = (event) => {
+        event.preventDefault();
+        if (window.confirm`Confirma a inclusão do horário ${horario} ?`) {
+
+            const horarios = { medicamento_id: novo_id, horario_planejado: horario, status: 0 }
+
+            fetch('http://192.168.0.152:3001/horarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(horarios),
+            })
+                .then((result) => {
+                    if (!result.ok){
+                        alert(`Não foi possivel gravar o novo horário: ${result.error} `)
+                        throw new Error(result.error)
+                    }
+                    return result.json()
+                })
+                .then((dados) => {
+                if (dados) {
+                    alert(`Horário ${horario} gravado com sucesso para o medicamento ${nome}`)
+
+                    if (window.confirm`Deseja incluir outro horário ?`) {
+                        setHorario('00:00:00')
+                    }   else {
+                        setHorario('')
+                        setIsHidden(true)
+                    }
+                    
+                } else {
+                    alert("Problemas ao gravar horário do medicamento.");
+                }
+                })
+                .catch((error) => console.error("Erro na autenticação:", error));
+        }
+        
+      
     }
 
     return (
@@ -57,33 +99,46 @@ function CadastrarMedicamento (props) {
             <h4>Cadastrar Medicamento</h4>
             <form onSubmit={onSubmitGravarMedicmentoHandler}>
                 <div >
-                    <label>Nome: <input className="nome" type="text" name="nome" placeholder="Digite o nome do remédio" value={nome} onChange={(event) => setNome(event.target.value)} required /> </label>
+                    <label>Nome: </label>
+                    <input type="text" name="nome" placeholder="Digite o nome do remédio" value={nome} onChange={(event) => setNome(event.target.value)} required />
                 </div>
                 <div >
-                    <label>Dosagem: <input className="dosagem" type="text" name="dosagem" placeholder="Digite a dosagem do remédio" value={dosagem} onChange={(event) => setDosagem(event.target.value)} required /> </label>
+                    <label>Dosagem:  </label>
+                    <input type="text" name="dosagem" placeholder="Digite a dosagem do remédio" value={dosagem} onChange={(event) => setDosagem(event.target.value)} required />
                 </div>
                 <div >
-                    <label>Prescrição: <input className="prescricao" type="text" name="prescricao" placeholder="Digite a prescicao do remédio" value={prescricao} onChange={(event) => setPrescricao(event.target.value)} /> </label>
+                    <label>Prescrição:  </label>
+                    <input type="text" name="prescricao" placeholder="Digite a prescicao do remédio" value={prescricao} onChange={(event) => setPrescricao(event.target.value)} />
                 </div>
                 <div >
-                    <label>Laboratório: <input className="laboratorio" type="text" name="laboratorio" placeholder="Digite o laboratorio do remédio" value={laboratorio} onChange={(event) => setLaboratorio(event.target.value)} /> </label>
+                    <label>Laboratório:  </label>
+                    <input type="text" name="laboratorio" placeholder="Digite o laboratorio do remédio" value={laboratorio} onChange={(event) => setLaboratorio(event.target.value)} />
                 </div>
                 <div >
-                    <label>Qtde. Estoque: <input className="quantidade" type="text" name="quantidade" placeholder="Digite a quantidade do remédio em estoque" value={quantidade} onChange={(event) => setQuantidade(event.target.value)} /> </label>
-                </div>
-                <div>
-                    <button type="submit">Gravar</button>
+                    <label>Estoque:  </label>
+                    <input type="text" name="quantidade" placeholder="Digite a quantidade do remédio em estoque" value={quantidade} onChange={(event) => setQuantidade(event.target.value)} />
                 </div>
             </form>
             <div>
-                {() => {
-                    if (teste) {
-                        <h4>Testando...</h4>
-                    }
-                    }
-                }
+                <button className="formButton" type="submit">Gravar</button>
             </div>
-           
+            <div className="GravarHorario" hidden={ishidden}>
+                <form  onSubmit={onSubmitGravarHorarioHandler}>
+                    <h5>
+                        Medicamento: {nome}
+                    </h5>
+                    <label>Horário</label>
+                        <input
+                            type="text"
+                            name="horario"
+                            placeholder="Digite o horário do medicamento"
+                            value={horario}
+                            onChange={(event) => setHorario(event.target.value)}
+                            required
+                        />
+                    <button type="submit">Gravar</button>
+                </form>
+            </div>
         </div>
     )
 }

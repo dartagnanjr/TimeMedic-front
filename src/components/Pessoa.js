@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Pessoa.css"
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ListaMedicamentos from "./ListaMedicamentos";
 import myImage from "../images/dartagnan.jpg"
 import imAnalia from "../images/analia.jpeg"
 import Biometria from "./Biometria"
+import MyButton from "../hooks/MyButton";
 
 function Pessoa (props) {
 
@@ -15,6 +15,8 @@ function Pessoa (props) {
     const [ medicamentos, setMedicamentos ] = useState([])
     const [ image, setImage ] = useState([])
     const [ pessoas, setPessoas] = useState([]);
+    const [ biometria, setBiometria ] = useState([])
+    const [ lista, setLista ] = useState([])
 
     useEffect(() => {
         const url = `http://192.168.0.152:3001/pessoas/${id}`
@@ -53,32 +55,39 @@ function Pessoa (props) {
         }
     }, [pessoas])
 
-    const onSubmitMedicamentos = (event) => {
-        event.preventDefault()
-        navigate('/cadastrar-medicamentos', { state: { id: id }})
-    }
-    const onSubmitListarMedicamentos = (event) => {
-        event.preventDefault()
-        navigate('/listar-medicamentos', { state: { id: id }})
-    }
+    useEffect(() => {
+        fetch(`http://192.168.0.152:3001/biometria/pessoa/${id}`, {
+            method: 'GET'
+        }).then((response) => {
+            if (!response.ok) {
+            throw new Error(`Erro: ${response.status}`);
+            }
+            return response.json();
+        }).then(dados => {
+            if (!dados){
+                alert('Nenhum registro encontrado.')
+                return
+            } 
+            const result = dados
+            setBiometria(result)
+        })
+    }, [])
 
-    const onSubmitListaCompras = (event) => {
-        event.preventDefault()
-
+    useEffect(() => {
         if (!medicamentos.length) {
             fetch(`http://192.168.0.152:3001/medicamentos/pessoa/${id}`, {
             method: 'GET'
             }).then(_response => _response.json()
             ).then(dados => {
                 if (dados.length){
-                    const response = dados.map(_medic => {
-                        return {
-                            nome: _medic.nome,
-                            dosagem: _medic.dosagem,
-                            laboratorio: _medic.laboratorio
-                        }
-                    })
-                    setMedicamentos(response)
+                    // const response = dados.map(_medic => {
+                    //     return {
+                    //         nome: _medic.nome,
+                    //         dosagem: _medic.dosagem,
+                    //         laboratorio: _medic.laboratorio
+                    //     }
+                    // })
+                    setMedicamentos(dados)
                     return
                 } else {
                     alert('Nenhum medicamento encontrado')
@@ -87,34 +96,63 @@ function Pessoa (props) {
         } else {
             setMedicamentos([])
         }
-        
+    }, [])
+
+    const onSubmitMedicamentos = (event) => {
+        //event.preventDefault()
+        navigate('/cadastrar-medicamentos', { state: { id: id }})
+    }
+    const onSubmitListarMedicamentos = (event) => {
+        //event.preventDefault()
+        navigate('/listar-medicamentos', { state: { id: id, medicamentos: medicamentos },  })
     }
 
+
     return (
-        <div className="Pessoa">
-            <img 
-                src={image}
-                alt="Button Icon"
-                style={{ width: "60px", height: "60px", marginRight: "5px", marginLeft: "5px"}}
-                        >
-            </img>
-            <h4>{pessoas.nome} {pessoas.sobre_nome} <p>{pessoas.email}</p></h4>
-            <button className="btReg" type="submit" onClick={onSubmitMedicamentos}> Cadastrar Medicamento </button>
-            <button className="LstMedics" type="submit" onClick={onSubmitListarMedicamentos}>Listar Medicamentos</button>
-            <button className="LstCompras" type="submit" onClick={onSubmitListaCompras}>Lista de Compras</button>
-            <div className="list">
-                {medicamentos.map(_medic => (
-                    <ListaMedicamentos
-                        nome={_medic.nome}
-                        dosagem={_medic.dosagem}
-                        laboratorio={_medic.laboratorio}    
-                    />
-                ))}
-            </div>
-            <div>
+        <div>
+            <section className="perfil">
+                <img 
+                    src={image}
+                    alt="Button Icon"
+                    style={{ width: "160px", height: "160px", marginRight: "5px", marginLeft: "5px"}}
+                            >
+                </img>
+                <div>
+                    <h4>{pessoas.nome} {pessoas.sobre_nome} </h4>
+                    <h5>{pessoas.email}</h5>
+                </div>
+            </section>
+            <div className="cadbiometria">
                 <Biometria pessoa_id={id} />
             </div>
-            
+            <div className="listBiometria">
+                <table>
+                    {biometria.map(_bio => (
+                        <tr>
+                            <td>{_bio.metrica_nome}:</td>
+                            <td align="right">{_bio.media}</td>
+                        </tr>
+                ))}
+                </table>
+            </div>
+            <div className="list">
+                <table>
+                    {medicamentos.map(_medic => (
+                       <ListaMedicamentos
+                       nome={_medic.nome}
+                       dosagem={_medic.dosagem}
+                       laboratorio={_medic.laboratorio}    
+                   /> 
+                    ))}
+                </table>
+            </div>
+            <section className="but">
+                <div >
+                    <MyButton className="buttons" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>
+                    <MyButton className="buttons" onClick={onSubmitListarMedicamentos}>Registrar</MyButton>
+                    {/* <MyButton className="buttons" onClick={onSubmitListaCompras}>Listar</MyButton> */}
+                </div>
+            </section>
         </div>
         
     )

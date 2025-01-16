@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import MyButton from "../hooks/MyButton";
+import './Quantidade.css'
 
 const Quantidade = (props) => {
     const [ ishidden, setIsHidden ] = useState(true);
@@ -20,12 +22,12 @@ const Quantidade = (props) => {
     }, )
 
     const onClickAdicionar = (event) => {
-        event.preventDefault()
+        //event.preventDefault()
         setIsHidden(!ishidden)
     }
 
     const onClickSalvar = (event) => {
-        event.preventDefault()
+        //event.preventDefault()
         
         if (window.confirm`Tem certeza que deseja incluir a nova quantidade ${event.target.value} ?`){
             
@@ -46,12 +48,22 @@ const Quantidade = (props) => {
         }
     }
     return (
-            <li>Estoque: {qtde}
-                <button className="button" style={{marginLeft: "10px"}} type="submit" onClick={onClickAdicionar} >Adicionar </button>
+        <tr>
+            <td>{qtde}</td>
+            <td>
+                <MyButton className="button" onClick={onClickAdicionar} >Adicionar</MyButton>
                 <input style={{ width: "35px", marginLeft: "0", border: "0"}} hidden={ishidden} className="inputQtde" type="text" name="adicionar" placeholder="Digite novo horáio" value={vr} onChange={(event) => setVr(event.target.value)} />
                 <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button> 
-            </li>
+            </td>
             
+
+        </tr>
+        
+        // <tr>
+           
+        //     <td>
+                        //     </td>
+        // </tr>
     )
 }
 

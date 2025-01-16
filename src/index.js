@@ -8,6 +8,7 @@ import Pessoa from './components/Pessoa'
 import CadastrarMedicamento from './components/CadastrarMedicamento'
 import GravarHorario from './components/GravarHorario'
 import ListarMedicamentos from './components/ListarMedicamentos';
+import FormPrincipal from './components/FormPrincipal'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <FormPrincipal></FormPrincipal>
     <RouterProvider router={router}/>
   </React.StrictMode>
 );

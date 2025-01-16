@@ -1,0 +1,9 @@
+.MyButton {
+    color: black;
+    background-color: inherit;
+    border-radius: 10%;
+    padding: 2px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-left: 10px;
+}

@@ -2,8 +2,8 @@ import React from "react";
 import './ListaMedicamentos.css'
 
 export default (props) => 
-    <ul>
-        <li>{props.nome} </li>
-        <li>{props.dosagem}</li>
-        <li>{props.laboratorio}</li>
-    </ul>
+    <tr>
+        <td>{props.nome} ({props.laboratorio})</td>
+        <td align="right">{props.dosagem}</td>
+    </tr>
+    

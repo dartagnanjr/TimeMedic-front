@@ -33,33 +33,41 @@ function Autenticacao(props) {
 
   return (
     <div className="Autenticacao">
+      <section>
+          <form onSubmit={onSubmitHandler}> 
+            <div>
+              <div>
+                <h2>Autenticação</h2>
+              </div>
+              <div>
+                <label><strong>Email: </strong></label>
+                <input
+                  type="text"
+                  name="email"
+                  placeholder="Digite o seu email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label><strong>Senha: </strong></label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Digite a senha"
+                  value={password}
+                  onChange={(event) => setSenha(event.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <button type="submit">Enviar</button>
+              </div>
+            </div>
+          </form>
+      </section>
       
-      <form onSubmit={onSubmitHandler}> 
-        <div className="Linha">
-          <h2>Autenticação</h2>
-          <label className="email"><strong>Email: </strong></label>
-            <input
-              type="text"
-              name="email"
-              placeholder="Digite o seu email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          <label className="senha"><strong>Senha: </strong></label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Digite a senha"
-              value={password}
-              onChange={(event) => setSenha(event.target.value)}
-              required
-            />
-          <div>
-            <button type="submit">Enviar</button>
-          </div>
-        </div>
-      </form>
     </div>
   );
 }

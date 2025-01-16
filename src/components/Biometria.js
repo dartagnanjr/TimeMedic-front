@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './Biometria.css'
+import MyButton from "../hooks/MyButton";
 
 
 const Biometria = (props) => {
@@ -58,15 +59,22 @@ const Biometria = (props) => {
     }
     return (
         <div>
-            <h4>Biometria </h4>
+            <div>
+                <h4>Biometria </h4>
+            </div>
+            
             {props.id}
-            <select className="form-metricas" value={metrica_id} onChange={(event) => setMetricaId(event.target.value)}>
-                {metricas.map(option => (
-                    <option value={option.id}>{option.metrica}</option>
-                ))}
-            </select>
-            <input className="ValorBio" type="text" name="dados" placeholder="Digite os dados correspondentes." value={values} onChange={(event) => setValue(event.target.value)} ></input>
-            <button className="buttonBioSalvar" type="submit" onClick={onClickSalvar} >Salvar</button>
+            <div>
+                <select className="form-metricas" value={metrica_id} onChange={(event) => setMetricaId(event.target.value)}>
+                    {metricas.map(option => (
+                        <option value={option.id}>{option.metrica}</option>
+                    ))}
+                </select>
+                <input className="ValorBio" type="text" name="dados" placeholder="Digite os dados correspondentes." value={values} onChange={(event) => setValue(event.target.value)} ></input>
+            </div>
+            <div >
+                <MyButton className="buttonSalvar" minhaFuncao={onClickSalvar} children={"Salvar"} ></MyButton>
+            </div>
         </div>
         
     )

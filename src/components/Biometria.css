@@ -34,3 +34,14 @@
     margin-bottom: 6.5px;
 }
 
+.divCentral {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.h4 {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}

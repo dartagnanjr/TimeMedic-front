@@ -1,218 +1,140 @@
 import React, { useState, useEffect } from "react";
 import './Medicamento.css'
 import { formatarData } from '../util/dates'
-import iClose from "../images/close.png"
-import Quantidade from "./Quantidade";
 import MyButton from "../hooks/MyButton";
 import api from '../services/api'
+import useMedicamento from "../hooks/useMedicamento";
+import { useNavigate } from "react-router-dom";
+
 
 const Medicamento = (props) => {
     const [ list_horarios, setListHorarios ] = useState([])
-    const [ quantidade_estoque, setQuantidadeEstoque ] = useState(props.quantidade_estoque.quantidade_estoque)
     const [ ishidden, setIsHidden ] = useState(true);
     const [ nvhorario, setNvHorario ] = useState('00:00:00')
-    const [ horario, setHorario ] = useState(props.horario)
-    //const [ medicamentos, setMedicamentos ] = useState(props.medicamentos.medicamentos)
-    const [ horarioPlanejado , setHorarioPlanejado ] = useState(props.horario_planejado)
+    const [ medicamento, setMedicamento, onRegistarHorarioMedicacao ] = useMedicamento([ props.medicamento ])
+    const navigate = useNavigate()
     
-    useEffect(() => {
-        api.get('/medicamentos/', { id: props.id })
-        .then(result => {
-            if (!result.ok) { throw new Error('Problemas no retorno da API')}
-            else { return result.json()}
-        }).then(dados => {
-            if (dados.length > 0) {
-                let response = []
-                dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
-                    response.push({horario: formatarData(_hora.created_at).fullDate() })
-                }) )
-                setListHorarios(response)
-                return
-            } else {
-                alert('Nenhum registro encontrado.')
-                return
-            }
-        })
-
-    }, [])
-    
-    const listarDiarioMedicamento = (event) => {
-        //event.preventDefault()
-
-        if (!list_horarios.length) {
-            fetch(`http://192.168.0.152:3001/medicamentos/diario/${props.id}`, {
-            method: 'GET'
-            })
-            .then(result => {
-                if (result.ok) {
-                    return result.json()
-                }
-            })
-            .then(dados => {
-                if (dados.length > 0) {
-                    let response = []
-                    dados.map(_regs => _regs.horarios_medicamentos.map(_hora => {
-                        response.push({horario: formatarData(_hora.created_at).fullDate() })
-                    }) )
-                    setListHorarios(response)
-                    return
-                } else {
-                    alert('Nenhum registro encontrado.')
-                    return
-                }
-            })
-        } else {
-            setListHorarios([])
-        }
-        
-    }
-
-    const onRegistarHorarioMedicacao = (horarios_id) => {
-
-        const horario = { horarios_id: horarios_id }
-        fetch('http://192.168.0.152:3001/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(horario)
-        })
-        .then((result) => result.json())
-            .then((dados) => {
-            if (dados.id) {
-                let qtde = quantidade_estoque - 1
-                setQuantidadeEstoque(qtde)
-                const result = horarioPlanejado.map(_hora => {
-                    if (_hora.id === horarios_id) {
-                        return {
-                            buttonDisabled: true,
-                            id: _hora.id,
-                            horario_planejado: _hora.horario_planejado
-                       } 
-                    } else {
-                        return {
-                            buttonDisabled: _hora.buttonDisabled,
-                            id: _hora.id,
-                            horario_planejado: _hora.horario_planejado
-                       } 
-                    }
-                })
-                setHorarioPlanejado(result)
-                alert(`Horário gravado com sucesso.`)
-            } else {
-                alert("Erro gravando o horário.");
-            }
-            })
-            .catch((error) => console.error("Erro gravando o horário: ", error));
-        
-    }
-    const montarComponente = (horarioPlanejado) => {
-        const retorno = horarioPlanejado.map(_hora => (
-            <tr>
-                <td >{_hora.horario_planejado}</td>
-                <td>
-                    <MyButton className="button" onClick={onClickEditar} hidden={ishidden} >Alterar</MyButton>
-                    <input  className="novoHorario" hidden={ishidden} type="text" name="novo_horario" placeholder="Digite novo horáio" value={nvhorario} onChange={(event) => setNvHorario(event.target.value)} ></input>
-                    <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button>
-                    <button className="button" type="submit" value={_hora.id} onClick={(event) => onRegistarHorarioMedicacao(event.target.value)} hidden={_hora.buttonDisabled}>  Tomei agora </button>
-                </td>
-            </tr>
+    const montarComponente = (medic) => {
+        const retorno = medic.map(_hora => (
+            <div>
+                {_hora.horario_planejado}
+                    <div>
+                        <button 
+                            className="button" 
+                            type="submit" 
+                            value={_hora.id} 
+                            onClick={(event) => onRegistarHorarioMedicacao(event.target.value)} 
+                            hidden={habilitaDesabilita(_hora) ? true : false}>
+                                Tomei agora 
+                        </button>
+                    </div> 
+                    <div>
+                        {_hora.horarios_medicamentos.length > 0 ? 
+                            (_hora.horarios_medicamentos.length > 1 ? 
+                                new Date(_hora.horarios_medicamentos[1].created_at).toLocaleTimeString() : 
+                                new Date(_hora.horarios_medicamentos[0].created_at).toLocaleTimeString()) 
+                        : null}
+                    </div>
+                        
+            </div>
         ))
         return retorno
     }
+    const habilitaDesabilita = (ptime) => {
 
-    const onClickEditar = (event) => {
-        setIsHidden(!ishidden)
-      }
-      const onClickSalvar = (event) => {
-        if (window.confirm`Tem certeza que deseja salvar o novo horário ?`){
-  
-          const payLoad = { horario_planejado: nvhorario }
-  
-          fetch(`http://192.168.0.152:3001/horarios/${props.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(payLoad)
-          }).then(result => {
-            if (!result.ok) {
-              alert('Problemas ao salvar o novo horário.', result.status )
-            } else {
-              setHorario(nvhorario)
-              alert('Novo horário salvo com sucesso.')
-              setIsHidden(true)
+        const ndate = new Date(String().concat(new Date().getFullYear(), '-', (new Date().getMonth() + 1), '-', new Date().getDate(), ' ', ptime.horario_planejado))
+
+        if (new Date() < ndate ) {
+            
+            if (ptime.horarios_medicamentos.length == 0) {
+                return true
+            } else if (ptime.horarios_medicamentos.length > 0) {
+                if (new Date(ptime.horarios_medicamentos[0].updated_at) < ndate) {
+                    return true
+                } else {
+                    return false
+                }
             }
-          })
-        }
-      }
+        } else if (new Date() > ndate) {
+
+            if (ptime.horarios_medicamentos.length == 0) {
+                return false
+
+            } else if (ptime.horarios_medicamentos.length > 0) {
+
+                const segundoHorario = ptime.horarios_medicamentos.length > 1 ? new Date(ptime.horarios_medicamentos[1].updated_at) : new Date(ptime.horarios_medicamentos[0].updated_at)
+                if (segundoHorario > ndate) {
+                    return true
+                } else if (segundoHorario < ndate) {
+                    return false
+                } else {
+                    return false
+                }
+            }
+        }  
+        
+    }
+    const handleEdit = () => {
+        navigate('/cadastrar-medicamentos', { state: { medicamento: medicamento } })
+    }
     return (
         <div className="medics">
-            {/* <div className="bt_excluir">
-                <button className="excluir" type="submit" onClick={props.removerMedicamento}>
-                        <img
-                            src={iClose}
-                            alt="Button Icon"
-                            style={{ width: "20px", height: "20px", marginRight: "4px" }}
-                        />    
-                    </button>
-            </div> */}
             <div>
-                <section>
+                <div 
+                    className="medics_title">
                     <div align="center">
-                        <td><strong>{props.nome}</strong> {props.dosagem}</td>
-                        <td> - ({props.laboratorio})</td>
+                        <td>
+                            <strong>
+                                {medicamento[0].nome}
+                            </strong> 
+                                {medicamento[0].dosagem}</td>
+                        <td> - ({medicamento[0].laboratorio})</td>
+                        <div align="center">
+                            <td>{medicamento[0].prescricao}</td>
+                        </div>
                     </div>
-                    <div align="center">
-                        <td>{props.prescricao}</td>
+                    <div className="controles">
+                        <div className="label_horario" >
+                            <strong>
+                                Horário:
+                            </strong>
+                            <div className="horarios">
+                                {montarComponente(medicamento[0].medicamentos_horarios)}
+                            </div>
+                        </div>
+                        <div className="qtde">
+                            <strong>
+                                Estoque:
+                            </strong>
+                            <div className="horarios">
+                                {medicamento[0].quantidade_estoque}
+                            </div>
+                        </div>
                     </div>
-                </section>
-            </div>
-            <table align="center">
-               
-                <tr>
-                    <td>Estoque:</td>
-                    <Quantidade id={props.id} quantidade_estoque={quantidade_estoque}/>
-                </tr>
-                <tr>
-                    <td>Horário:</td>
-                    {montarComponente(horarioPlanejado)}
-                </tr>
+                    <div>
+                        <MyButton
+                            className="formButton"
+                            onClick={handleEdit} 
+                            >
+                            Editar
+                        </MyButton>
+                    </div>
+                    <div >
+                        <button 
+                            className="bt_excluir"
+                            type="submit" 
+                            onClick={props.removerMedicamento} 
+                            hidden={false}>
+                            &times;
+                        </button>
+                    </div>
+                </div>
                 
-            </table>
+            </div>
+            
+            
         </div>
         
-        
-        
-    //    <div className="Medicamento">
-    //         <table>
-                
-    //             {montaTabelaMedicamentos(medicamentos)}
-    //             {
-    //                  Object.entries(medicamentos).map(_medics => {
-    //                     <tr>
-    //                         <td><h5>{medicamentos.nome}</h5></td>
-    //                         <td>{medicamentos.dosagem}</td>
-    //                         <td>{medicamentos.prescricao}</td>
-    //                         <td>{medicamentos.laboratorio}</td>
-    //                         <Quantidade id={props.id} quantidade_estoque={quantidade_estoque}/>
-    //                         {montarComponente(horarioPlanejado)}
-    //                     </tr>
-                       
-    //                 })
-    //             }
-                
-    //         </table>
-            
-    //         <div>
-    //            
-    //             <MyButton className="button" onClick={listarDiarioMedicamento}>Listar Diário</MyButton>
-    //             <div>
-    //                 {list_horarios.map(_horarios => (
-    //                 <li>
-    //                     Horário: {_horarios.horario}
-    //                 </li>
-    //                 ))} 
-    //             </div>
-                
-    //         </div>
-    //     </div> 
     )
     
 };

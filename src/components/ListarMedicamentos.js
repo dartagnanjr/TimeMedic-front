@@ -3,9 +3,12 @@ import Medicamento from "./Medicamento";
 import { useLocation } from "react-router-dom";
 //import useMedicamentos from "../hooks/useMedicamentos";
 import './ListaMedicamentos.css'
+import MyButton from "../hooks/MyButton";
+import { useNavigate } from "react-router-dom";
 
 function ListarMedicamentos (props){
     const location = useLocation();
+    const navigate = useNavigate()
     const { id, medicamentos } = location.state || {};
       
     const removerMedicamento = (key) => {
@@ -31,17 +34,11 @@ function ListarMedicamentos (props){
         <div align="center">
             {medicamentos.map(_medic => (
                 <Medicamento
-                    id={_medic.id}
-                    nome={_medic.nome}
-                    dosagem={_medic.dosagem}
-                    prescricao={_medic.prescricao}
-                    laboratorio={_medic.laboratorio}
-                    horario_planejado={_medic.medicamentos_horarios}
-                    quantidade_estoque={ { id: _medic.id, quantidade_estoque: _medic.quantidade_estoque } }
-                    removerMedicamento={() => removerMedicamento(_medic)}
+                    medicamento={_medic}
+                   removerMedicamento={() => removerMedicamento(_medic)}
                 />
             ))}
-
+            <MyButton className="formButton" onClick={() => (navigate(-1))} >Retornar</MyButton>
         </div>
         
     )

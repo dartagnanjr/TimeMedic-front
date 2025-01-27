@@ -16,7 +16,7 @@ function Pessoa (props) {
     const [ image, setImage ] = useState([])
     const [ pessoas, setPessoas] = useState([]);
     const [ biometria, setBiometria ] = useState([])
-    const [ lista, setLista ] = useState([])
+
 
     useEffect(() => {
         const url = `http://192.168.0.152:3001/pessoas/${id}`
@@ -114,10 +114,10 @@ function Pessoa (props) {
                 <img 
                     src={image}
                     alt="Button Icon"
-                    style={{ width: "160px", height: "160px", marginRight: "5px", marginLeft: "5px"}}
+                    style={{ width: "160px", height: "190px", marginRight: "5px", marginLeft: "5px"}}
                             >
                 </img>
-                <div>
+                <div className="title">
                     <h4>{pessoas.nome} {pessoas.sobre_nome} </h4>
                     <h5>{pessoas.email}</h5>
                 </div>
@@ -139,6 +139,7 @@ function Pessoa (props) {
                 <table>
                     {medicamentos.map(_medic => (
                        <ListaMedicamentos
+                       pessoa_id={_medic.pessoa_id}
                        nome={_medic.nome}
                        dosagem={_medic.dosagem}
                        laboratorio={_medic.laboratorio}    
@@ -148,9 +149,10 @@ function Pessoa (props) {
             </div>
             <section className="but">
                 <div >
-                    <MyButton className="buttons" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>
-                    <MyButton className="buttons" onClick={onSubmitListarMedicamentos}>Registrar</MyButton>
+                    <MyButton className="formButton" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>
+                    <MyButton className="formButton" onClick={onSubmitListarMedicamentos}>Registrar</MyButton>
                     {/* <MyButton className="buttons" onClick={onSubmitListaCompras}>Listar</MyButton> */}
+                    <MyButton className="formButton" onClick={() => navigate(-1)} >Logout</MyButton>
                 </div>
             </section>
         </div>

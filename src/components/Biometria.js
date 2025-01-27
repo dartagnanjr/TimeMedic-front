@@ -59,12 +59,12 @@ const Biometria = (props) => {
     }
     return (
         <div>
-            <div>
+            <div className="h4">
                 <h4>Biometria </h4>
             </div>
             
             {props.id}
-            <div>
+            <div className="divCentral">
                 <select className="form-metricas" value={metrica_id} onChange={(event) => setMetricaId(event.target.value)}>
                     {metricas.map(option => (
                         <option value={option.id}>{option.metrica}</option>
@@ -73,7 +73,7 @@ const Biometria = (props) => {
                 <input className="ValorBio" type="text" name="dados" placeholder="Digite os dados correspondentes." value={values} onChange={(event) => setValue(event.target.value)} ></input>
             </div>
             <div >
-                <MyButton className="buttonSalvar" minhaFuncao={onClickSalvar} children={"Salvar"} ></MyButton>
+                <MyButton className="formButton" onClick={onClickSalvar} children={"Salvar"} ></MyButton>
             </div>
         </div>
         

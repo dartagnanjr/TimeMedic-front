@@ -16,7 +16,7 @@ const Quantidade = (props) => {
             if (!dados){
                 return
             } else {
-                setQuantidade(dados.quantidade_estoque)
+                setQuantidade(dados[0].quantidade_estoque)
             }
         })
     }, )
@@ -48,22 +48,10 @@ const Quantidade = (props) => {
         }
     }
     return (
-        <tr>
-            <td>{qtde}</td>
-            <td>
-                <MyButton className="button" onClick={onClickAdicionar} >Adicionar</MyButton>
-                <input style={{ width: "35px", marginLeft: "0", border: "0"}} hidden={ishidden} className="inputQtde" type="text" name="adicionar" placeholder="Digite novo horáio" value={vr} onChange={(event) => setVr(event.target.value)} />
-                <button className="button" type="submit" hidden={ishidden} onClick={onClickSalvar} >Salvar</button> 
-            </td>
-            
-
-        </tr>
+        <div>
+            <div>Estoque:</div> <div>{qtde}</div>     
+        </div>
         
-        // <tr>
-           
-        //     <td>
-                        //     </td>
-        // </tr>
     )
 }
 

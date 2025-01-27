@@ -1,18 +1,7 @@
-.Medicamento {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    border: 2px solid blue;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
-  }
-
-  
-
-  .excluir {
-    position: relative;
+  .bt_excluir {
+    background-color: inherit;
+    justify-content: end;
+    align-items: end;
     top: 7px;
     right: 7px;
     padding: 1.5px 1.5px;
@@ -22,45 +11,42 @@
     cursor: pointer; /* Muda o cursor ao passar sobre o botão */
   }
 
-/* .button {
-  cursor: pointer;
-  font-size: inherit;
-  border: 5px;
-  color: rgb(30, 30, 34);
-  background-color: inherit;
 
-} */
-
-.buttonListar {
-  cursor: pointer;
-  font-size: inherit;
-  border: 5px;
-  color: rgb(30, 30, 34);
-  margin-top: 10px;
-  background-color: beige;
-
-}
-
-.novoHorario {
-  width: 60px;
-  margin-left: 15px;
-  margin-right: 5px;
-  border: 0;
-  text-align: center;
-}
-
-
-  .medics {
-    display: flex;
+  .medics_title {
+    background-color: rgb(231, 245, 245);
+    font-size: large;
+    display: grid;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    align-items: center;
     border-radius: 20px;
-    margin-top: 3%;
-    padding: 10px;
+    padding: 20px;
     border: 2px solid rgb(75, 145, 129);
-    width: 500px;
-    
+    width: auto;
+    height: auto;
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
   }
+ 
+.controles {
+  padding: 5px;
+  display: flex;
+}
 
+.label_horario {
+  padding: 5px;
+ display: grid;
+ /*justify-content: space-around;       /* Centraliza o conteúdo horizontalmente */
 
+}
+
+.horarios {
+  padding: 5px;
+  display: grid;
+}
+
+.qtde {
+  padding: 5px;
+  display: grid;
+}

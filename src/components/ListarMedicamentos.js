@@ -2,7 +2,7 @@ import React from "react";
 import Medicamento from "./Medicamento";
 import { useLocation } from "react-router-dom";
 //import useMedicamentos from "../hooks/useMedicamentos";
-import './ListaMedicamentos.css'
+import './styles/ListarMedicamentos.css'
 import MyButton from "../hooks/MyButton";
 import { useNavigate } from "react-router-dom";
 
@@ -31,9 +31,10 @@ function ListarMedicamentos (props){
 
     
     return (
-        <div align="center">
+        <div className="ListaMedicamentos">
             {medicamentos.map(_medic => (
                 <Medicamento
+                    className="medicamento"
                     medicamento={_medic}
                    removerMedicamento={() => removerMedicamento(_medic)}
                 />

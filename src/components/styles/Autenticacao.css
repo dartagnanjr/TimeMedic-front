@@ -1,0 +1,42 @@
+.autenticacao {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(70, 33, 233);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.input {
+    outline: unset;
+    padding: 10px;
+    width: 250px;
+    border: 1px solid rgb(186, 211, 211);
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.autenticacao input:focus {
+    background-color: beige;
+}
+
+.autenticacao button {
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 15px;
+    border-radius: 15px;
+    background-color: rgb(33, 120, 233);
+    width: 250px;
+    color: white;
+}
+
+.autenticacao form label {
+    margin-left: 6px;
+    padding: 3px;
+}
+
+.autenticacao b {
+    margin-right: 200px;
+    color: rgb(3, 3, 3);
+    font-size: 15px;
+    margin-top: 10px;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import './FormPrincipal.css'
+import './styles/FormPrincipal.css'
 
 const FormPrincipal = () => {
     return (

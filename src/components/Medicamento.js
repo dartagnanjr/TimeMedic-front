@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import './Medicamento.css'
-import { formatarData } from '../util/dates'
+import React, { useEffect } from "react";
+import './styles/Medicamento.css'
 import MyButton from "../hooks/MyButton";
-import api from '../services/api'
 import useMedicamento from "../hooks/useMedicamento";
 import { useNavigate } from "react-router-dom";
+import Lapis from '../components/icons/Lapis'
 
 
 const Medicamento = (props) => {
-    const [ list_horarios, setListHorarios ] = useState([])
-    const [ ishidden, setIsHidden ] = useState(true);
-    const [ nvhorario, setNvHorario ] = useState('00:00:00')
-    const [ medicamento, setMedicamento, onRegistarHorarioMedicacao ] = useMedicamento([ props.medicamento ])
+    const [ medicamento, setMedicamento, onRegistarHorarioMedicacao, getMedicamento ] = useMedicamento([ props.medicamento ])
     const navigate = useNavigate()
-    
+    useEffect(() => {
+        getMedicamento()
+    }, [ ])
+
     const montarComponente = (medic) => {
         const retorno = medic.map(_hora => (
             <div>
@@ -31,8 +30,8 @@ const Medicamento = (props) => {
                     <div>
                         {_hora.horarios_medicamentos.length > 0 ? 
                             (_hora.horarios_medicamentos.length > 1 ? 
-                                new Date(_hora.horarios_medicamentos[1].created_at).toLocaleTimeString() : 
-                                new Date(_hora.horarios_medicamentos[0].created_at).toLocaleTimeString()) 
+                                new Date(_hora.horarios_medicamentos[1].updated_at).toLocaleTimeString() : 
+                                new Date(_hora.horarios_medicamentos[0].updated_at).toLocaleTimeString()) 
                         : null}
                     </div>
                         
@@ -46,7 +45,7 @@ const Medicamento = (props) => {
 
         if (new Date() < ndate ) {
             
-            if (ptime.horarios_medicamentos.length == 0) {
+            if (ptime.horarios_medicamentos.length === 0) {
                 return true
             } else if (ptime.horarios_medicamentos.length > 0) {
                 if (new Date(ptime.horarios_medicamentos[0].updated_at) < ndate) {
@@ -57,7 +56,7 @@ const Medicamento = (props) => {
             }
         } else if (new Date() > ndate) {
 
-            if (ptime.horarios_medicamentos.length == 0) {
+            if (ptime.horarios_medicamentos.length === 0) {
                 return false
 
             } else if (ptime.horarios_medicamentos.length > 0) {
@@ -75,65 +74,62 @@ const Medicamento = (props) => {
         
     }
     const handleEdit = () => {
-        navigate('/cadastrar-medicamentos', { state: { medicamento: medicamento } })
+        navigate('/cadastrar-medicamentos', { state: { medic: medicamento } })
     }
     return (
-        <div className="medics">
-            <div>
-                <div 
-                    className="medics_title">
-                    <div align="center">
-                        <td>
-                            <strong>
-                                {medicamento[0].nome}
-                            </strong> 
-                                {medicamento[0].dosagem}</td>
-                        <td> - ({medicamento[0].laboratorio})</td>
-                        <div align="center">
-                            <td>{medicamento[0].prescricao}</td>
-                        </div>
-                    </div>
-                    <div className="controles">
-                        <div className="label_horario" >
-                            <strong>
-                                Horário:
-                            </strong>
-                            <div className="horarios">
-                                {montarComponente(medicamento[0].medicamentos_horarios)}
-                            </div>
-                        </div>
-                        <div className="qtde">
-                            <strong>
-                                Estoque:
-                            </strong>
-                            <div className="horarios">
-                                {medicamento[0].quantidade_estoque}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <MyButton
-                            className="formButton"
-                            onClick={handleEdit} 
-                            >
-                            Editar
-                        </MyButton>
-                    </div>
-                    <div >
-                        <button 
-                            className="bt_excluir"
-                            type="submit" 
-                            onClick={props.removerMedicamento} 
-                            hidden={false}>
-                            &times;
-                        </button>
+        <div 
+            className="medics_title">
+            <div align="center">
+                <td>
+                    <td>
+                        <b>
+                            <a href="">{medicamento[0].nome.toUpperCase()}</a>
+                        </b>
+                    </td> 
+                    <br />
+                    <td>{medicamento[0].dosagem} - ({medicamento[0].laboratorio})</td>  
+                </td>
+                <div align="center" className="div_dosagem">
+                    <td>{medicamento[0].prescricao}</td>
+                </div>
+            </div>
+            <div className="controles">
+                <div className="label_horario" >
+                        Horário:
+                    <div className="horarios">
+                        {montarComponente(medicamento[0].medicamentos_horarios)}
                     </div>
                 </div>
-                
+                <div className="qtde">
+                        Estoque:
+                    <div className="horarios">
+                        {medicamento[0].quantidade_estoque}
+                    </div>
+                </div>
             </div>
-            
-            
+            <div>
+                <MyButton
+                    className="bt_icon"
+                    onClick={handleEdit} 
+                    >
+                    <Lapis tamanho={20} cor="#007BFF"></Lapis>
+                </MyButton>
+            </div>
+            <div >
+                <button 
+                    className="bt_excluir"
+                    type="submit" 
+                    onClick={props.removerMedicamento} 
+                    hidden={false}>
+                    &times;
+                </button>
+            </div>
         </div>
+                
+            
+            
+            
+        
         
     )
     

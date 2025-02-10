@@ -1,29 +1,29 @@
-.form-metricas{
+.container {
     display: grid;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+.form-metricas{
+
     color: rgb(30, 30, 34);  
     border: 3px;
     padding: 5px;
-    margin-bottom: 6.5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
 }
 .buttonSalvar {
-    display: table-column;
-    align-items: center;
-    border-radius: 5%;
+    border-radius: 15px;
     color: black;
     cursor: pointer;
-    margin-top: 5%;
+    margin-top: 5px;
     margin-left: 10px;
     padding: 10px;
-    width: 250px;
+    width: 200px;
 }
 
 .ValorBio {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     outline: unset;
     border-radius: 10px;
     color: rgb(30, 30, 34);  
@@ -35,9 +35,10 @@
 }
 
 .divCentral {
-    display: grid;
+    display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .h4 {

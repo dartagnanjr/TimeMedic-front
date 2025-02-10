@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Autenticacao.css';
+import './styles/Autenticacao.css';
 
 function Autenticacao(props) {
   const [email, setEmail] = useState('');
@@ -32,43 +32,36 @@ function Autenticacao(props) {
   };
 
   return (
-    <div className="Autenticacao">
-      <section>
-          <form onSubmit={onSubmitHandler}> 
-            <div>
-              <div>
-                <h2>Autenticação</h2>
-              </div>
-              <div>
-                <label><strong>Email: </strong></label>
-                <input
-                  type="text"
-                  name="email"
-                  placeholder="Digite o seu email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label><strong>Senha: </strong></label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Digite a senha"
-                  value={password}
-                  onChange={(event) => setSenha(event.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <button type="submit">Enviar</button>
-              </div>
-            </div>
-          </form>
-      </section>
-      
-    </div>
+    <form 
+      onSubmit={onSubmitHandler}
+      className="autenticacao"> 
+      <h2>Autenticação</h2>
+      <>
+        <b>Email: </b>
+        <input
+          className="input"
+          type="text"
+          name="email"
+          placeholder="Digite o seu email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+      </>
+      <>
+        <b>Senha: </b>
+        <input
+          className="input"
+          type="password"
+          name="password"
+          placeholder="Digite a senha"
+          value={password}
+          onChange={(event) => setSenha(event.target.value)}
+          required
+        />
+      </>
+      <button type="submit">Enviar</button>        
+    </form>
   );
 }
 

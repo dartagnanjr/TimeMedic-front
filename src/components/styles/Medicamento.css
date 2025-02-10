@@ -1,32 +1,40 @@
   .bt_excluir {
     background-color: inherit;
-    justify-content: end;
-    align-items: end;
-    top: 7px;
-    right: 7px;
+    top: 15px;
+    right: 15px;
     padding: 1.5px 1.5px;
-    color: black; /* Cor do texto */
     border: none; /* Remove bordas */
-    border-radius: 35px; /* Arredonda os cantos */
     cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+    position: absolute;
+    
   }
 
+  .bt_icon {
+    background-color: inherit;
+    bottom: 40px;
+    right: 5px;
+    border: none; /* Remove bordas */
+    cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+    position: absolute;
+    
+  }
 
   .medics_title {
     background-color: rgb(231, 245, 245);
     font-size: large;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    align-items: center;
     border-radius: 20px;
     padding: 20px;
     border: 2px solid rgb(75, 145, 129);
-    width: auto;
-    height: auto;
-    margin-top: 3%;
-    margin-left: 3%;
-    margin-right: 3%;
+    width: 300px;
+    height: 200px;
+    gap: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
   }
  
 .controles {
@@ -50,3 +58,8 @@
   padding: 5px;
   display: grid;
 }
+
+.div_dosagem {
+  font-size: 0.97rem ;
+}
+

@@ -6,7 +6,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Autenticacao from './components/Autenticacao';
 import Pessoa from './components/Pessoa'
 import CadastrarMedicamento from './components/CadastrarMedicamento'
-import GravarHorario from './components/GravarHorario'
 import ListarMedicamentos from './components/ListarMedicamentos';
 import FormPrincipal from './components/FormPrincipal'
 
@@ -26,10 +25,6 @@ const router = createBrowserRouter([
   {
     path: '/registrar-diario',
     element: '<Pessoas/>'
-  },
-  {
-    path: '/gravar-horario',
-    element: <GravarHorario/>
   },
   {
     path: '/listar-medicamentos',

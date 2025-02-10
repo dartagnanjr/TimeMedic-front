@@ -1,58 +1,73 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import './CadastrarMedicamento.css'
+import './styles/CadastrarMedicamento.css'
 import useMedicamento from "../hooks/useMedicamento";
 import MyButton from "../hooks/MyButton";
+import Horario from "./Horario";
+
 
 function CadastrarMedicamento (props) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { medicamento } = location.state || {};
+    let { medic } = location.state || { medic: [{}] };
     const [ ishidden, setIsHidden ] = useState(true)
-    const [ horario, setHorario ] = useState('')
+    const [ horario, setHorario ] = useState([])
     const [ novo_id, setNovoId ] = useState('')
-    const [ medicament, setMedicamento ] = useMedicamento(medicamento)
+    const [ medicamento, setMedicamento,,, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, updateHorarioMedicamento ] = useMedicamento(medic)
+    const [mostrarComponente, setMostrarComponente] = useState(false);
+    let horas = []
 
     
 
-    const onSubmitGravarMedicmentoHandler = (event) => {
+    const onSubmitGravarMedicmentoHandler = async (event) => {
         event.preventDefault();
-
+        const id = medicamento[0].id
         const medic = { 
-                nome: medicament[0].nome, 
-                dosagem: medicament[0].dosagem, 
-                prescricao: medicament[0].prescricao, 
-                laboratorio: medicament[0].laboratorio, 
-                quantidade_estoque: medicament[0].quantidade_estoque, 
-                pessoa_id: medicament[0].pessoa_id }
+                nome: medicamento[0].nome, 
+                dosagem: medicamento[0].dosagem, 
+                prescricao: medicamento[0].prescricao, 
+                laboratorio: medicamento[0].laboratorio, 
+                quantidade_estoque: medicamento[0].quantidade_estoque, 
+                pessoa_id: medicamento[0].pessoa_id }
     
-        fetch('http://192.168.0.152:3001/medicamentos', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(medic)
-        }).then((result) => {
-            if (!result.ok){
-                alert('Error ao cadastrar medicamentos. ', result.status)
-                return
-            } else {
-                return result.json()
-            }
-        }).then((dados) => {
-            if (!dados){
-                alert(`Error: Medicamento ${medicament[0].nome} já cadastrado.`)
+        if (medicamento[0].id) {
+            const ret = await setUpdateMedicamento(medic, id)
+            if (!ret) {
+                alert('Problemas ao atualizar medicamento.')
                 return
             }
-            if (dados){
-                alert(`Medicamento ${medicament[0].nome} gravado com sucesso.`)
-                //navigate('/gravar-horario', { state: { id: dados.id, nome: medicamento.nome } })
-                navigate(-1); // Retorna ao componente pai
-            } else {
-                throw new Error('Problemas ao cadastrar remédio, tente novamente.')
+            //const horario = await updateHorarioMedicamento()
+            alert(String().concat('Medicamento ', medicamento[0].name, ' atualizado com sucesso.'))
+            navigate(-1)
+        } else {
+            if (medicamento[0].medicamentos_horarios.length === 0) {
+                alert('Adicione pelo menos um horário para o medicamento.')
+                return
             }
-        })
+            const nv_medicamentoId = await createMedicamento(medic)
+            if (!nv_medicamentoId) {
+                alert('Problemas criando novo medicamento.')
+                return
+            }
+            const horarios = horario.map(_x => {
+                return {
+                    medicamento_id: nv_medicamentoId,
+                    horario_planejado: String().concat(_x, ':00'),
+                    status: 0
+                }
+            })
+            const ret = await createHorarioMedicamento(...horarios)
+            if (!ret){ 
+                alert('Problemas ao registrar horario do medicamento.')
+                return
+            }
+            console.log(ret)
+            alert(`Medicamento ${medicamento[0].nome} cadastrado com sucesso.`)
+            navigate(-1)
+        }
+        return
         
     }
-
     const onSubmitGravarHorarioHandler = (event) => {
         event.preventDefault();
         if (window.confirm`Confirma a inclusão do horário ${horario} ?`) {
@@ -73,118 +88,112 @@ function CadastrarMedicamento (props) {
                 })
                 .then((dados) => {
                 if (dados) {
-                    alert(`Horário ${horario} gravado com sucesso para o medicamento ${medicament[0].nome}`)
-
+                    alert(`Horário ${horario} gravado com sucesso para o medicamento ${medicamento[0].nome}`)
                     if (window.confirm`Deseja incluir outro horário ?`) {
                         setHorario('00:00:00')
                     }   else {
                         setHorario('')
                         setIsHidden(true)
                     }
-                    
                 } else {
                     alert("Problemas ao gravar horário do medicamento.");
                 }
                 })
                 .catch((error) => console.error("Erro na autenticação:", error));
         }
-        
-      
     }
-    const onSubmitChanges = (key, index, newValue) => {
+    const onSubmitChanges = (key, newValue) => {
 
-        const atualizaMedic = (() => {
-            const updatedKeyData = { ...medicament[0][key] };
-            updatedKeyData[key] = newValue;
-            return [ { ...medicament[0], [key]: newValue } ];
-          });
-          const result = atualizaMedic()
-          setMedicamento(result)
-          
+        try {
+            const updatedMedicament = [ { ...medicamento[0], [key]: newValue } ];
+            setMedicamento(updatedMedicament);
+        } catch (error) {
+            throw new Error(error)
+        }
+       
+    }
+
+    const remRegister = (id) => {
+        medicamento[0].medicamentos_horarios = medicamento[0].medicamentos_horarios.filter(_hor => _hor.id !== id) 
+        setMostrarComponente(!mostrarComponente)
+    }
+
+    const addRegister = () => {
+        const id = medicamento[0].medicamentos_horarios.length + 1
+        medicamento[0].medicamentos_horarios.push({ id: id })
+        setMostrarComponente(!mostrarComponente)
+    }
+
+    const addHorario = (hora) => {
+        setHorario([ ...horario, hora ])
     }
 
     return (
-        <div className="CadastrarMedicamento">
+        <div className="form_input">
+            
+            <form  onSubmit={onSubmitGravarMedicmentoHandler}>
             <h4>Cadastrar Medicamento</h4>
-            <form onSubmit={onSubmitGravarMedicmentoHandler}>
-                <div >
-                    <label>Nome: </label>
+                <label>Nomesssss: </label>
+                <input 
+                    type="text" 
+                    name="nome" 
+                    placeholder="Digite o nome do remédio" 
+                    value={medicamento[0].nome} 
+                    onChange={(event) => onSubmitChanges('nome', event.target.value)} 
+                    required />
+                <label>Dosagem:  </label>
+                <input 
+                    type="text" 
+                    name="dosagem" 
+                    placeholder="Digite a dosagem do remédio" 
+                    value={medicamento[0].dosagem} 
+                    onChange={(event) => onSubmitChanges('dosagem', event.target.value)} 
+                    required />
+                <label>Prescrição:  </label>
                     <input 
-                        type="text" 
-                        name="nome" 
-                        placeholder="Digite o nome do remédio" 
-                        value={medicament[0].nome} 
-                        onChange={(event) => onSubmitChanges('nome', 0, event.target.value)} 
-                        required />
-                </div>
-                <div >
-                    <label>Dosagem:  </label>
-                    <input 
-                        type="text" 
-                        name="dosagem" 
-                        placeholder="Digite a dosagem do remédio" 
-                        value={medicament[0].dosagem} 
-                        onChange={(event) => onSubmitChanges('dosagem', 0, event.target.value)} 
-                        required />
-                </div>
-                <div >
-                    <label>Prescrição:  </label>
-                    <input 
-                        type="text" 
-                        name="prescricao" 
-                        placeholder="Digite a prescicao do remédio" 
-                        value={medicament[0].prescricao} 
-                        onChange={(event) => onSubmitChanges('prescricao', 0, event.target.value)} />
-                </div>
-                <div >
-                    <label>Laboratório:  </label>
-                    <input 
-                        type="text" 
-                        name="laboratorio" 
-                        placeholder="Digite o laboratorio do remédio" 
-                        value={medicament[0].laboratorio} 
-                        onChange={(event) => onSubmitChanges('laboratorio', 0, event.target.value)} />
-                </div>
-                <div >
-                    <label>Estoque:  </label>
-                    <input 
-                        type="text" 
-                        name="quantidade" 
-                        placeholder="Digite a quantidade do remédio em estoque" 
-                        value={medicament[0].quantidade_estoque} 
-                        onChange={(event) => onSubmitChanges('quantidade_estoque', 0, event.target.value)} />
-                </div>
-                <div>
-                <button 
-                    className="formButton" 
-                    type="submit"
-                    onSubmit={onSubmitGravarMedicmentoHandler}
-                    >
+                    type="text" 
+                    name="prescricao" 
+                    placeholder="Digite a prescicao do remédio" 
+                    value={medicamento[0].prescricao} 
+                    onChange={(event) => onSubmitChanges('prescricao', event.target.value)} />
+                <label>Laboratório:  </label>
+                <input 
+                    type="text" 
+                    name="laboratorio" 
+                    placeholder="Digite o laboratorio do remédio" 
+                    value={medicamento[0].laboratorio} 
+                    onChange={(event) => onSubmitChanges('laboratorio', event.target.value)} />
+
+                <label>Estoque:  </label>
+                <input 
+                    type="number" 
+                    name="quantidade" 
+                    placeholder="Digite a quantidade do remédio em estoque" 
+                    value={medicamento[0].quantidade_estoque} 
+                    onChange={(event) => onSubmitChanges('quantidade_estoque', event.target.value)} />
+                <button type="button" 
+                        onClick={addRegister}>+</button>
+
+                {mostrarComponente ? medicamento[0].medicamentos_horarios.map(_hor => (
+                <>
+                    <label>Horário: </label>
+                    <Horario id={medicamento[0].id} 
+                            nome={medicamento[0].nome} 
+                            horarioId={_hor.id}
+                            horario_planejado={_hor.horario_planejado} 
+                            addHorario={addHorario} 
+                            remRegister={remRegister}/>
+                </>
+                )) : setMostrarComponente(!mostrarComponente) }    
+                <button
+                    className="formButton1"
+                    onSubmit={onSubmitGravarMedicmentoHandler}>
                         Gravar
                 </button>
-            </div>
+                
             </form>
-            <div>
-                <MyButton className="formButton" onClick={() => navigate(-1)}>Cancelar</MyButton>
-            </div>
-            <div className="GravarHorario" hidden={ishidden}>
-                <form  
-                    onSubmit={onSubmitGravarHorarioHandler}>
-                    <h5>
-                        Medicamento: {medicament[0].nome}
-                    </h5>
-                    <label>Horário</label>
-                        <input
-                            type="text"
-                            name="horario"
-                            placeholder="Digite o horário do medicamento"
-                            value={horario}
-                            onChange={(event) => setHorario(event.target.value)}
-                            required
-                        />
-                    <button type="submit">Gravar</button>
-                </form>
-            </div>
+            <MyButton onClick={() => navigate(-1)}>Cancelar</MyButton>
+            
         </div>
     )
 }

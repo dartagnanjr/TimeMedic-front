@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./Pessoa.css"
+import "./styles/Pessoa.css"
 import { useLocation, useNavigate } from "react-router-dom";
 import ListaMedicamentos from "./ListaMedicamentos";
 import myImage from "../images/dartagnan.jpg"
 import imAnalia from "../images/analia.jpeg"
 import Biometria from "./Biometria"
 import MyButton from "../hooks/MyButton";
+import useBiometria from "../hooks/useBiometria";
 
 function Pessoa (props) {
 
@@ -15,7 +16,7 @@ function Pessoa (props) {
     const [ medicamentos, setMedicamentos ] = useState([])
     const [ image, setImage ] = useState([])
     const [ pessoas, setPessoas] = useState([]);
-    const [ biometria, setBiometria ] = useState([])
+    const { biometria, getBiometrias, setBiometria, onInsertBiometria } = useBiometria(id)
 
 
     useEffect(() => {
@@ -56,21 +57,7 @@ function Pessoa (props) {
     }, [pessoas])
 
     useEffect(() => {
-        fetch(`http://192.168.0.152:3001/biometria/pessoa/${id}`, {
-            method: 'GET'
-        }).then((response) => {
-            if (!response.ok) {
-            throw new Error(`Erro: ${response.status}`);
-            }
-            return response.json();
-        }).then(dados => {
-            if (!dados){
-                alert('Nenhum registro encontrado.')
-                return
-            } 
-            const result = dados
-            setBiometria(result)
-        })
+        getBiometrias()
     }, [])
 
     useEffect(() => {
@@ -80,13 +67,6 @@ function Pessoa (props) {
             }).then(_response => _response.json()
             ).then(dados => {
                 if (dados.length){
-                    // const response = dados.map(_medic => {
-                    //     return {
-                    //         nome: _medic.nome,
-                    //         dosagem: _medic.dosagem,
-                    //         laboratorio: _medic.laboratorio
-                    //     }
-                    // })
                     setMedicamentos(dados)
                     return
                 } else {
@@ -100,13 +80,22 @@ function Pessoa (props) {
 
     const onSubmitMedicamentos = (event) => {
         //event.preventDefault()
-        navigate('/cadastrar-medicamentos', { state: { id: id }})
+        const medic = { 
+            id: '',
+            nome: '', 
+            dosagem: '', 
+            prescricao: '', 
+            laboratorio: '', 
+            quantidade_estoque: '', 
+            pessoa_id: id,
+            medicamentos_horarios: []
+         }
+        navigate('/cadastrar-medicamentos', { state: { medic: [ medic ] }})
     }
     const onSubmitListarMedicamentos = (event) => {
         //event.preventDefault()
         navigate('/listar-medicamentos', { state: { id: id, medicamentos: medicamentos },  })
     }
-
 
     return (
         <div>
@@ -118,45 +107,63 @@ function Pessoa (props) {
                             >
                 </img>
                 <div className="title">
-                    <h4>{pessoas.nome} {pessoas.sobre_nome} </h4>
-                    <h5>{pessoas.email}</h5>
+                    <b>{pessoas.nome} {pessoas.sobre_nome} </b>
+                    <br />
+                    <b>{pessoas.email}</b>
+                    <br />
+                    <b>Nascimento: {new Date(pessoas.data_nascimento).toLocaleString('pt-BR', {
+                                                                            day: '2-digit',
+                                                                            month: '2-digit',
+                                                                            year: 'numeric'
+                                                                            }).replace(/\//g, '-')}</b>
                 </div>
+                <Biometria pessoa_id={id} onInsertBiometria={onInsertBiometria} />
             </section>
-            <div className="cadbiometria">
-                <Biometria pessoa_id={id} />
-            </div>
+            
             <div className="listBiometria">
                 <table>
-                    {biometria.map(_bio => (
-                        <tr>
-                            <td>{_bio.metrica_nome}:</td>
-                            <td align="right">{_bio.media}</td>
-                        </tr>
-                ))}
-                </table>
-            </div>
-            <div className="list">
-                <table>
+                    <tr>
+                        <td><b>Medicamento</b></td>
+                        <td align="right"><b>Dosagem</b></td>
+                        <td align="right"><b>Estoque</b></td>
+                    </tr>
                     {medicamentos.map(_medic => (
                        <ListaMedicamentos
                        pessoa_id={_medic.pessoa_id}
                        nome={_medic.nome}
                        dosagem={_medic.dosagem}
-                       laboratorio={_medic.laboratorio}    
+                       laboratorio={_medic.laboratorio} 
+                       qtde={_medic.quantidade_estoque}   
                    /> 
                     ))}
                 </table>
+                <table>
+                    <tr>
+                        <td><b>Metrica</b></td>
+                        <td align="right"><b>Último</b></td>
+                        <td align="right"><b>Media</b></td>
+                        <td align="right"><b>Menor Valor</b></td>
+                        <td align="right"><b>Maior Valor</b></td>
+                        
+                    </tr>
+                    {biometria.map(_bio => (
+                        <tr>
+                            <td>{_bio.nome}:</td>
+                            <td align="right">{parseFloat(_bio.ultimo)}</td>
+                            <td align="right">{parseFloat(_bio.media).toPrecision(4)}</td>
+                            <td align="right">{_bio.menor_valor}</td>
+                            <td align="right">{_bio.maior_valor}</td>
+                        </tr>
+                ))}
+                </table>
             </div>
-            <section className="but">
-                <div >
-                    <MyButton className="formButton" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>
-                    <MyButton className="formButton" onClick={onSubmitListarMedicamentos}>Registrar</MyButton>
-                    {/* <MyButton className="buttons" onClick={onSubmitListaCompras}>Listar</MyButton> */}
-                    <MyButton className="formButton" onClick={() => navigate(-1)} >Logout</MyButton>
-                </div>
-            </section>
+            <div className="but" >
+                <MyButton className="bt_pessoa" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>
+                <MyButton className="bt_pessoa" onClick={onSubmitListarMedicamentos}>Registrar</MyButton>
+                <MyButton className="bt_pessoa" onClick={() => navigate(-1)} >Logout</MyButton>
+            </div> 
         </div>
-        
+         
     )
     
 };

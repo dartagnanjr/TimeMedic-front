@@ -1,4 +1,3 @@
-import React from "react";
 const { PORT, HOST } = process.env
 
 
@@ -13,16 +12,63 @@ function config() {
 
 const api = {
 
-    get: async (url, params = null, headers) => {
+    get: (url, params = null, headers) => {
         const conf = config()
-        try {
-            return fetch(`${conf}${url}${params.id}`, {
-                method: 'GET'
-            })
-        } catch (error) {
-            throw new Error(error)
-        }
+        let dd = []
+        return fetch(`${conf}${url}${params}`, {
+            method: 'GET'
+        }).then(result => (result.json()))
+        .then(dados => {
+            if (dados) {
+                dd = [ ...dados ]
+            } else {
+                throw new Error('Nenhum registro encontrado.')
+            }
+            return dd
+        })
+        .catch(err => { throw new Error(err)})
+    },
+    post: (url, params = null, headers, payLoad) => {
+        const conf = config()
+        let dd = []
+        return fetch(`${conf}${url}${params}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payLoad)
+        }).then(result => (result.json()))
+        .then(dados => {
+            if (dados) {
+                dd = [ dados ]
+                
+            } else {
+                throw new Error('Nenhum registro encontrado.')
+            }
+            return dd
+        })
+        .catch(err => { throw new Error(err)})
+        
+    },
+    put: (url, params = null, headers = null, payLoad) => {
+        const conf = config()
+        let dd = []
+        return fetch(`${conf}${url}${params}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payLoad)
+        }).then(result => (result.json()))
+        .then(dados => {
+            if (dados) {
+                dd = { ...dados }
+                
+            } else {
+                throw new Error('Nenhum registro encontrado.')
+            }
+            return dd
+        })
+        .catch(err => { throw new Error(err)})
+        
     }
+
 }
 
 export default api

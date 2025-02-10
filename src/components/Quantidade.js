@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MyButton from "../hooks/MyButton";
-import './Quantidade.css'
+import './styles/Quantidade.css'
 
 const Quantidade = (props) => {
     const [ ishidden, setIsHidden ] = useState(true);

@@ -3,23 +3,24 @@ import { useState } from "react";
 import api from "../services/api";
 
 
-function useMedicamento  (medic) {
-    const [ medicamento, setMedic  ] = useState(medic)
-    
-    
+function useMedicamento(medic) {
+    const [medicamento, setMedic] = useState(medic)
+
+
     const setMedicamento = (medics) => {
         setMedic(medics)
     }
 
     const setNovoMedicamento = async (params) => {
-        
-        const medic = { 
-            nome: params[0].nome, 
-            dosagem: params[0].dosagem, 
-            prescricao: params[0].prescricao, 
-            laboratorio: params[0].laboratorio, 
-            quantidade_estoque: params[0].quantidade_estoque, 
-            pessoa_id: params[0].pessoa_id }
+
+        const medic = {
+            nome: params[0].nome,
+            dosagem: params[0].dosagem,
+            prescricao: params[0].prescricao,
+            laboratorio: params[0].laboratorio,
+            quantidade_estoque: params[0].quantidade_estoque,
+            pessoa_id: params[0].pessoa_id
+        }
 
         const ret = await api.post('/medicamentos', params[0].id, medic)
         setMedic(ret)
@@ -38,18 +39,18 @@ function useMedicamento  (medic) {
 
     const getMedicamento = async () => {
         const ret = await api.get('/medicamentos/', medicamento[0].id)
-        setMedic(ret)       
-     }
+        setMedic(ret)
+    }
 
-     const createHorarioMedicamento = async (params) => {
+    const createHorarioMedicamento = async (params) => {
         const ret = await api.post('/horarios', '', '', params)
         return ret
-     }
+    }
 
-     const updateHorarioMedicamento = async (params, id) => {
-        const ret = await api.put('/horarios', id, '', params)
+    const updateHorarioMedicamento = async (params, id) => {
+        const ret = await api.put('/horarios/', id, '', params)
         return ret
-     }
+    }
 
     const onRegistarHorarioMedicacao = async (horarios_id) => {
 
@@ -61,24 +62,7 @@ function useMedicamento  (medic) {
         getMedicamento()
         alert(`Horário gravado com sucesso.`)
         return
-        const horario = { horarios_id: horarios_id }
-        fetch('http://192.168.0.152:3001/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(horario)
-        })
-        .then((result) => result.json())
-            .then((dados) => {
-            if (dados.id) {
 
-                getMedicamento()
-                alert(`Horário gravado com sucesso.`)
-            } else {
-                alert("Erro gravando o horário.");
-            }
-            })
-            .catch((error) => console.error("Erro gravando o horário: ", error));
-        
     }
 
     const atualizaObj = (dados) => {
@@ -88,25 +72,64 @@ function useMedicamento  (medic) {
             const horariosAtualizados = _horarios.medicamentos_horarios.map(_regs => {
 
                 if (_regs.id === dados.horarios_id) {
-                  
-                    return { ..._regs, horarios_medicamentos: [ dados ] }
+
+                    return { ..._regs, horarios_medicamentos: [dados] }
 
                 } else {
                     return { ..._regs }
                 }
-              });
-            
+            });
+
             return { ..._horarios, medicamentos_horarios: horariosAtualizados }; // Atualiza a pessoa
 
-          });
-          
-          setMedic(medicamentoAtualizado)
-          
-          
+        });
+
+        setMedic(medicamentoAtualizado)
+
+
     }
 
-    
-    
+    const habilitaDesabilita = (ptime) => {
+
+        const ndate = new Date(String().concat(new Date().getFullYear(), '-',
+            (new Date().getMonth() + 1), '-', new Date().getDate(), ' ',
+            ptime.medicamentos_horarios?.map(_mh => _mh.horario_planejado)))
+
+        if (new Date() < ndate) {
+
+            if (ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos.length) === 0) {
+                return true
+            } else if (ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos.length) > 0) {
+                if (new Date(ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos?.map(_hm =>
+                    _hm.updated_at))) < ndate) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } else if (new Date() > ndate) {
+
+            if (ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos.length) === 0) {
+                return false
+
+            } else if (ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos.length) > 0) {
+
+                const segundoHorario = ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos.length) > 1 ?
+                    new Date(ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos?.map(_hm => _hm.updated_at))) :
+                    new Date(ptime.medicamentos_horarios?.map(_mh => _mh.horarios_medicamentos?.map(_hm => _hm.updated_at)))
+                if (segundoHorario > ndate) {
+                    return true
+                } else if (segundoHorario < ndate) {
+                    return false
+                } else {
+                    return false
+                }
+            }
+        }
+
+    }
+
+
     return [
         medicamento,
 
@@ -116,7 +139,8 @@ function useMedicamento  (medic) {
         setUpdateMedicamento,
         createMedicamento,
         createHorarioMedicamento,
-        updateHorarioMedicamento
+        updateHorarioMedicamento,
+        habilitaDesabilita
     ]
 
 }

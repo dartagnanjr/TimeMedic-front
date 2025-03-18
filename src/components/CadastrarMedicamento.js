@@ -15,8 +15,6 @@ function CadastrarMedicamento (props) {
     const [ novo_id, setNovoId ] = useState('')
     const [ medicamento, setMedicamento,,, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, updateHorarioMedicamento ] = useMedicamento(medic)
     const [mostrarComponente, setMostrarComponente] = useState(false);
-    let horas = []
-
     
 
     const onSubmitGravarMedicmentoHandler = async (event) => {
@@ -34,6 +32,15 @@ function CadastrarMedicamento (props) {
             const ret = await setUpdateMedicamento(medic, id)
             if (!ret) {
                 alert('Problemas ao atualizar medicamento.')
+                return
+            }
+            const response = medicamento[0].medicamentos_horarios.map(async _hor => {
+                console.log(_hor, _hor.id)
+                return await updateHorarioMedicamento({ horario_planejado: _hor.horario_planejado }, _hor.id)
+            })
+            console.log(response)
+            if (!response) {
+                alert('Problemas ao atualizar horário do medicamento.')
                 return
             }
             //const horario = await updateHorarioMedicamento()
@@ -124,8 +131,16 @@ function CadastrarMedicamento (props) {
         setMostrarComponente(!mostrarComponente)
     }
 
-    const addHorario = (hora) => {
-        setHorario([ ...horario, hora ])
+    const addHorario = (hora, pId) => {
+        const nv_horario = medicamento[0].medicamentos_horarios.filter(_f => _f.id == pId)
+        .map(_hor => {
+            return { ..._hor, horario_planejado: hora}
+        })
+        const nv_medicamento = { ...medicamento[0], medicamentos_horarios: nv_horario }
+        setMedicamento([nv_medicamento]) 
+        
+        //setHorario([hora])
+  
     }
 
     return (

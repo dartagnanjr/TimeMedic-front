@@ -5,18 +5,17 @@ import MyButton from "../hooks/MyButton";
 
 function Horario (props) {
     const [ horario, setHorario ] = useState(props.horario_planejado)
+    const [ horarioId, setHorarioId ] = useState(props.horarioId)
     const location = useLocation();
-    // const { id, nome } = location.state || {}; // Recupera o id do estado passado na navegação
     
-
-
     return (
         <>
           <input
               type="time"
               name="horario_planejado"
               value={horario}
-              onChange={(event) => props.addHorario(event.target.value)} />
+              onChange={(event) => props.addHorario(event.target.value, horarioId)} 
+              />
           <MyButton
               className="btn"
               type="submit"

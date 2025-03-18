@@ -40,7 +40,7 @@ const Medicamento = (props) => {
         return retorno
     }
     const habilitaDesabilita = (ptime) => {
-
+        
         const ndate = new Date(String().concat(new Date().getFullYear(), '-', (new Date().getMonth() + 1), '-', new Date().getDate(), ' ', ptime.horario_planejado))
 
         if (new Date() < ndate ) {

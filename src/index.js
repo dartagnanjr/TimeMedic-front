@@ -8,6 +8,7 @@ import Pessoa from './components/Pessoa'
 import CadastrarMedicamento from './components/CadastrarMedicamento'
 import ListarMedicamentos from './components/ListarMedicamentos';
 import FormPrincipal from './components/FormPrincipal'
+import NovaListagemMedicamentos from './components/NovaListagemMedicamentos';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
     path: '/listar-medicamentos',
     element: <ListarMedicamentos/>
   }
-
+  ,
+  {
+    path: '/nova-listagem-medicamentos',
+    element: <NovaListagemMedicamentos/>
+  }
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

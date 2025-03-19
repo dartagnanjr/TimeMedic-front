@@ -125,6 +125,7 @@ function Pessoa(props) {
                 <table>
                     <tr>
                         <td><b>Medicamento</b></td>
+                        <td align="center"><b>Laboratório</b></td>
                         <td align="right"><b>Dosagem</b></td>
                         <td align="right"><b>Estoque</b></td>
                         <td align="center"><b>Horario</b></td>

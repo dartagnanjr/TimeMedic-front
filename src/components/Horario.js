@@ -1,25 +1,41 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
 import './styles/Horario.css'
 import MyButton from "../hooks/MyButton";
 
 function Horario (props) {
+    
     const [ horario, setHorario ] = useState(props.horario_planejado)
     const [ horarioId, setHorarioId ] = useState(props.horarioId)
-    const location = useLocation();
+    const onChangeHandler = (event) => {
+        event.preventDefault()
+        if (window.confirm`Confirma a inclusão do horário ${event.target.value} ?`){
+            setHorario(event.target.value)
+            setHorarioId(props.key)
+            props.addHorario(horario)
+        } else {
+            return
+        }
+            
+    }
     
+    const onSubmitHandler = (key) => {
+        props.remRegister(key)
+    }
     return (
         <>
           <input
               type="time"
-              name="horario_planejado"
+              key={props.key}
+              //name="horario_planejado"
               value={horario}
-              onChange={(event) => props.addHorario(event.target.value, horarioId)} 
+              onChange={onChangeHandler} 
               />
+            
           <MyButton
               className="btn"
               type="submit"
-              onClick={() => {props.remRegister(props.horarioId)}}
+              value={props.key}
+              onClick={onSubmitHandler}
               >
               -
           </MyButton>

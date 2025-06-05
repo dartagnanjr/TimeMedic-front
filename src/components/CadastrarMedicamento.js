@@ -9,32 +9,33 @@ import Horario from "./Horario";
 function CadastrarMedicamento (props) {
     const navigate = useNavigate();
     const location = useLocation();
-    let { medic } = location.state || { medic: [{}] };
-    const [ ishidden, setIsHidden ] = useState(true)
+    let { medic } = location.state || {};
     const [ horario, setHorario ] = useState([])
-    const [ novo_id, setNovoId ] = useState('')
-    const [ medicamento, setMedicamento,,, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, updateHorarioMedicamento ] = useMedicamento(medic)
+    const [ novo_id, setNovoId ] = useState([])
+    
+    const { medicamento, setMedicamento, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, updateHorarioMedicamento } = useMedicamento({
+        id: medic[0]?.id || 0,
+        nome: medic[0]?.nome || '',
+        dosagem: medic[0]?.dosagem || '',
+        prescricao: medic[0]?.prescricao || '',
+        laboratorio: medic[0]?.laboratorio || '',
+        quantidade_estoque: medic[0]?.quantidade_estoque || 0,
+        pessoa_id: medic[0]?.pessoa_id || 0,
+        medicamentos_horarios: medic[0]?.medicamentos_horarios || []
+    })
     const [mostrarComponente, setMostrarComponente] = useState(false);
     
-
     const onSubmitGravarMedicmentoHandler = async (event) => {
         event.preventDefault();
-        const id = medicamento[0].id
-        const medic = { 
-                nome: medicamento[0].nome, 
-                dosagem: medicamento[0].dosagem, 
-                prescricao: medicamento[0].prescricao, 
-                laboratorio: medicamento[0].laboratorio, 
-                quantidade_estoque: medicamento[0].quantidade_estoque, 
-                pessoa_id: medicamento[0].pessoa_id }
-    
-        if (medicamento[0].id) {
-            const ret = await setUpdateMedicamento(medic, id)
+        const id = medicamento.id
+        
+        if (medicamento.id) {
+            const ret = await setUpdateMedicamento(medicamento, id)
             if (!ret) {
                 alert('Problemas ao atualizar medicamento.')
                 return
             }
-            const response = medicamento[0].medicamentos_horarios.map(async _hor => {
+            const response = medicamento.medicamentos_horarios.map(async _hor => {
                 console.log(_hor, _hor.id)
                 return await updateHorarioMedicamento({ horario_planejado: _hor.horario_planejado }, _hor.id)
             })
@@ -44,10 +45,10 @@ function CadastrarMedicamento (props) {
                 return
             }
             //const horario = await updateHorarioMedicamento()
-            alert(String().concat('Medicamento ', medicamento[0].name, ' atualizado com sucesso.'))
+            alert(String().concat('Medicamento ', medicamento.name, ' atualizado com sucesso.'))
             navigate(-1)
         } else {
-            if (medicamento[0].medicamentos_horarios.length === 0) {
+            if (medicamento.medicamentos_horarios?.length === 0) {
                 alert('Adicione pelo menos um horário para o medicamento.')
                 return
             }
@@ -56,63 +57,63 @@ function CadastrarMedicamento (props) {
                 alert('Problemas criando novo medicamento.')
                 return
             }
-            const horarios = horario.map(_x => {
-                return {
+            horario.map(async _x => {
+                const result = {
                     medicamento_id: nv_medicamentoId,
-                    horario_planejado: String().concat(_x, ':00'),
+                    horario_planejado: _x,
                     status: 0
                 }
+                const ret = await createHorarioMedicamento(result)
+                if (!ret){ 
+                    alert(`Problemas ao criar horário: ${_x}`)
+                    return
+                }
             })
-            const ret = await createHorarioMedicamento(...horarios)
-            if (!ret){ 
-                alert('Problemas ao registrar horario do medicamento.')
-                return
-            }
-            console.log(ret)
-            alert(`Medicamento ${medicamento[0].nome} cadastrado com sucesso.`)
+            alert('Cadastro de horários realizado com sucesso.')
+            
+            alert(`Medicamento ${medicamento.nome} cadastrado com sucesso.`)
             navigate(-1)
         }
         return
         
     }
-    const onSubmitGravarHorarioHandler = (event) => {
-        event.preventDefault();
-        if (window.confirm`Confirma a inclusão do horário ${horario} ?`) {
+    // const onSubmitGravarHorarioHandler = (event) => {
+    //     event.preventDefault();
+    //     if (window.confirm`Confirma a inclusão do horário ${horario} ?`) {
 
-            const horarios = { medicamento_id: novo_id, horario_planejado: horario, status: 0 }
+    //         const horarios = { medicamento_id: novo_id, horario_planejado: horario, status: 0 }
 
-            fetch('http://192.168.0.152:3001/horarios', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(horarios),
-            })
-                .then((result) => {
-                    if (!result.ok){
-                        alert(`Não foi possivel gravar o novo horário: ${result.error} `)
-                        throw new Error(result.error)
-                    }
-                    return result.json()
-                })
-                .then((dados) => {
-                if (dados) {
-                    alert(`Horário ${horario} gravado com sucesso para o medicamento ${medicamento[0].nome}`)
-                    if (window.confirm`Deseja incluir outro horário ?`) {
-                        setHorario('00:00:00')
-                    }   else {
-                        setHorario('')
-                        setIsHidden(true)
-                    }
-                } else {
-                    alert("Problemas ao gravar horário do medicamento.");
-                }
-                })
-                .catch((error) => console.error("Erro na autenticação:", error));
-        }
-    }
+    //         fetch('http://192.168.0.152:3001/horarios', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(horarios),
+    //         })
+    //             .then((result) => {
+    //                 if (!result.ok){
+    //                     alert(`Não foi possivel gravar o novo horário: ${result.error} `)
+    //                     throw new Error(result.error)
+    //                 }
+    //                 return result.json()
+    //             })
+    //             .then((dados) => {
+    //             if (dados) {
+    //                 alert(`Horário ${horario} gravado com sucesso para o medicamento ${medicamento.nome}`)
+    //                 if (window.confirm`Deseja incluir outro horário ?`) {
+    //                     setHorario('00:00:00')
+    //                 }   else {
+    //                     setHorario('')
+    //                 }
+    //             } else {
+    //                 alert("Problemas ao gravar horário do medicamento.");
+    //             }
+    //             })
+    //             .catch((error) => console.error("Erro na autenticação:", error));
+    //     }
+    // }
     const onSubmitChanges = (key, newValue) => {
 
         try {
-            const updatedMedicament = [ { ...medicamento[0], [key]: newValue } ];
+            const updatedMedicament = [ { ...medicamento, [key]: newValue } ];
             setMedicamento(updatedMedicament);
         } catch (error) {
             throw new Error(error)
@@ -121,26 +122,23 @@ function CadastrarMedicamento (props) {
     }
 
     const remRegister = (id) => {
-        medicamento[0].medicamentos_horarios = medicamento[0].medicamentos_horarios.filter(_hor => _hor.id !== id) 
-        setMostrarComponente(!mostrarComponente)
+        //const { id } = target.value
+        setNovoId(novo_id.filter(_hor => _hor.id !== id))
+        novo_id.length > 0 ? setMostrarComponente(true) : setMostrarComponente(false)
+        
     }
 
     const addRegister = () => {
-        const id = medicamento[0].medicamentos_horarios.length + 1
-        medicamento[0].medicamentos_horarios.push({ id: id })
-        setMostrarComponente(!mostrarComponente)
+        setNovoId([ ...novo_id, novo_id.length + 1 ])
+        //medicamento.medicamentos_horarios.push({ id: novo_id })
+        console.log('horarios: ', horario, 'ids: ', novo_id)
     }
 
-    const addHorario = (hora, pId) => {
-        const nv_horario = medicamento[0].medicamentos_horarios.filter(_f => _f.id == pId)
-        .map(_hor => {
-            return { ..._hor, horario_planejado: hora}
-        })
-        const nv_medicamento = { ...medicamento[0], medicamentos_horarios: nv_horario }
-        setMedicamento([nv_medicamento]) 
-        
-        //setHorario([hora])
-  
+    const addHorario = (hora) => {
+        setHorario([...horario, hora])
+        setMostrarComponente(!mostrarComponente)
+        //setNovoId([ ...novo_id, horario.length + 1])
+        //console.log('horarios: ', horario, 'ids: ', novo_id)
     }
 
     return (
@@ -148,12 +146,12 @@ function CadastrarMedicamento (props) {
             
             <form  onSubmit={onSubmitGravarMedicmentoHandler}>
             <h4>Cadastrar Medicamento</h4>
-                <label>Nomesssss: </label>
+                <label>Nome: </label>
                 <input 
                     type="text" 
                     name="nome" 
                     placeholder="Digite o nome do remédio" 
-                    value={medicamento[0].nome} 
+                    value={medicamento.nome} 
                     onChange={(event) => onSubmitChanges('nome', event.target.value)} 
                     required />
                 <label>Dosagem:  </label>
@@ -161,7 +159,7 @@ function CadastrarMedicamento (props) {
                     type="text" 
                     name="dosagem" 
                     placeholder="Digite a dosagem do remédio" 
-                    value={medicamento[0].dosagem} 
+                    value={medicamento.dosagem} 
                     onChange={(event) => onSubmitChanges('dosagem', event.target.value)} 
                     required />
                 <label>Prescrição:  </label>
@@ -169,14 +167,14 @@ function CadastrarMedicamento (props) {
                     type="text" 
                     name="prescricao" 
                     placeholder="Digite a prescicao do remédio" 
-                    value={medicamento[0].prescricao} 
+                    value={medicamento.prescricao} 
                     onChange={(event) => onSubmitChanges('prescricao', event.target.value)} />
                 <label>Laboratório:  </label>
                 <input 
                     type="text" 
                     name="laboratorio" 
                     placeholder="Digite o laboratorio do remédio" 
-                    value={medicamento[0].laboratorio} 
+                    value={medicamento.laboratorio} 
                     onChange={(event) => onSubmitChanges('laboratorio', event.target.value)} />
 
                 <label>Estoque:  </label>
@@ -184,20 +182,21 @@ function CadastrarMedicamento (props) {
                     type="number" 
                     name="quantidade" 
                     placeholder="Digite a quantidade do remédio em estoque" 
-                    value={medicamento[0].quantidade_estoque} 
+                    value={medicamento.quantidade_estoque} 
                     onChange={(event) => onSubmitChanges('quantidade_estoque', event.target.value)} />
                 <button type="button" 
                         onClick={addRegister}>+</button>
 
-                {mostrarComponente ? medicamento[0].medicamentos_horarios.map(_hor => (
+                {mostrarComponente ? novo_id?.map((_hor, i) => (
+                    
                 <>
                     <label>Horário: </label>
-                    <Horario id={medicamento[0].id} 
-                            nome={medicamento[0].nome} 
-                            horarioId={_hor.id}
-                            horario_planejado={_hor.horario_planejado} 
+                    <Horario id={medicamento.id} 
+                            key={i}
+                            //name="horario_planejado"
+                            horario_planejado={ horario[i] || ''} 
                             addHorario={addHorario} 
-                            remRegister={remRegister}/>
+                            remRegister={() => remRegister(i)}/>
                 </>
                 )) : setMostrarComponente(!mostrarComponente) }    
                 <button

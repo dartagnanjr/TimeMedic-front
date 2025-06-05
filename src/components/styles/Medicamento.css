@@ -20,11 +20,11 @@
   }
 
   .medics_title {
-    background-color: rgb(231, 245, 245);
+    background-color: rgba(226, 163, 68, 0.541);
     font-size: large;
     border-radius: 20px;
     padding: 20px;
-    border: 2px solid rgb(75, 145, 129);
+    border: 2px solid rgb(63, 53, 158);
     width: 300px;
     height: 200px;
     gap: 10px;

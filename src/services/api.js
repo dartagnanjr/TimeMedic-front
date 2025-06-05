@@ -4,7 +4,7 @@ const { PORT, HOST } = process.env
 function config() {  
     const confs = {
         port: 3001,
-        host: '192.168.0.152',
+        host: '127.0.0.1',
         http: "http://"
     }
     return String().concat(confs.http, confs.host, ':', confs.port)
@@ -12,15 +12,20 @@ function config() {
 
 const api = {
 
-    get: (url, params = null, headers) => {
+    get: async (url, params = null, headers) => {
         const conf = config()
         let dd = []
-        return fetch(`${conf}${url}${params}`, {
+        return await fetch(`${conf}${url}${params}`, {
             method: 'GET'
         }).then(result => (result.json()))
         .then(dados => {
             if (dados) {
-                dd = [ ...dados ]
+                if (Array.isArray(dados)){
+                    dd = [ ...dados ]
+                } else {
+                    dd = { ...dados }
+                }
+                
             } else {
                 throw new Error('Nenhum registro encontrado.')
             }
@@ -28,17 +33,21 @@ const api = {
         })
         .catch(err => { throw new Error(err)})
     },
-    post: (url, params = null, headers, payLoad) => {
+    post: async (url, params = null, headers, payLoad) => {
         const conf = config()
         let dd = []
-        return fetch(`${conf}${url}${params}`, {
+        return await fetch(`${conf}${url}${params}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payLoad)
         }).then(result => (result.json()))
         .then(dados => {
             if (dados) {
-                dd = [ dados ]
+                if (Array.isArray(dados)){
+                    dd = [ ...dados ]
+                } else {
+                    dd = { ...dados }
+                }
                 
             } else {
                 throw new Error('Nenhum registro encontrado.')
@@ -48,10 +57,10 @@ const api = {
         .catch(err => { throw new Error(err)})
         
     },
-    put: (url, params = null, headers = null, payLoad) => {
+    put: async (url, params = null, headers = null, payLoad) => {
         const conf = config()
         let dd = []
-        return fetch(`${conf}${url}${params}`, {
+        return await fetch(`${conf}${url}${params}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payLoad)

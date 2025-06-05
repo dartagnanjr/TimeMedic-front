@@ -8,7 +8,8 @@ import Pessoa from './components/Pessoa'
 import CadastrarMedicamento from './components/CadastrarMedicamento'
 import ListarMedicamentos from './components/ListarMedicamentos';
 import FormPrincipal from './components/FormPrincipal'
-import NovaListagemMedicamentos from './components/NovaListagemMedicamentos';
+import CadastroPessoa from './components/CadastroPessoa';
+import ResetarSenha from './components/ResetarSenha';
 
 const router = createBrowserRouter([
   {
@@ -33,9 +34,15 @@ const router = createBrowserRouter([
   }
   ,
   {
-    path: '/nova-listagem-medicamentos',
-    element: <NovaListagemMedicamentos/>
+    path: '/cadastro-pessoa',
+    element: <CadastroPessoa />
   }
+  ,
+  {
+    path: '/resetar-senha',
+    element: <ResetarSenha email="" />
+  }
+
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

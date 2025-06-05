@@ -7,11 +7,14 @@ import Lapis from '../components/icons/Lapis'
 
 
 const Medicamento = (props) => {
-    const [ medicamento, setMedicamento, onRegistarHorarioMedicacao, getMedicamento ] = useMedicamento([ props.medicamento ])
+    
+    const { medicamento, onRegistarHorarioMedicacao, getMedicamento } = useMedicamento([ props.medicamento ])
     const navigate = useNavigate()
+    
     useEffect(() => {
         getMedicamento()
-    }, [ ])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const montarComponente = (medic) => {
         const retorno = medic.map(_hora => (
@@ -74,7 +77,7 @@ const Medicamento = (props) => {
         
     }
     const handleEdit = () => {
-        navigate('/cadastrar-medicamentos', { state: { medic: medicamento } })
+        navigate('/cadastrar-medicamentos', { state: { medic: {...medicamento} } })
     }
     return (
         <div 
@@ -82,9 +85,9 @@ const Medicamento = (props) => {
             <div align="center">
                 <td>
                     <td>
-                        <b>
-                            <a href="">{medicamento[0].nome.toUpperCase()}</a>
-                        </b>
+                        <tr>
+                            <b>{medicamento[0].nome.toUpperCase()}</b>
+                        </tr>
                     </td> 
                     <br />
                     <td>{medicamento[0].dosagem} - ({medicamento[0].laboratorio})</td>  

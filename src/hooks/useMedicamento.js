@@ -1,40 +1,37 @@
-// import api from '../services/api'
+// import api from '../services/api'medicamentos
 import { useState } from "react";
 import api from "../services/api";
 
 
 function useMedicamento(medic) {
+    
     const [medicamento, setMedic] = useState(medic)
+    const [medicamentos, setMedicamentosData] = useState([])
 
+    const getMedicamentos = async (id) => {
+        const dados = await api.get('/medicamentos/pessoa/', id)
+        setMedicamentosData(dados)
+        return dados
+    }
+
+    const setMedicamentos = (dados) => {
+        setMedicamentosData(dados)
+        return dados
+    }
 
     const setMedicamento = (medics) => {
         setMedic(medics)
     }
 
-    const setNovoMedicamento = async (params) => {
-
-        const medic = {
-            nome: params[0].nome,
-            dosagem: params[0].dosagem,
-            prescricao: params[0].prescricao,
-            laboratorio: params[0].laboratorio,
-            quantidade_estoque: params[0].quantidade_estoque,
-            pessoa_id: params[0].pessoa_id
-        }
-
-        const ret = await api.post('/medicamentos', params[0].id, medic)
-        setMedic(ret)
-    }
-
-    const setUpdateMedicamento = async (params, id) => {
-        const ret = await api.put('/medicamentos/', id, '', params)
+    const setUpdateMedicamento = (params, id) => {
+        const ret = api.put('/medicamentos/', id, '', params)
         setMedic(ret)
         return ret
     }
 
     const createMedicamento = async (params) => {
         const ret = await api.post('/medicamentos', '', '', params)
-        return ret[0].id
+        return ret.id
     }
 
     const getMedicamento = async () => {
@@ -42,13 +39,13 @@ function useMedicamento(medic) {
         setMedic(ret)
     }
 
-    const createHorarioMedicamento = async (params) => {
-        const ret = await api.post('/horarios', '', '', params)
+    const createHorarioMedicamento = (params) => {
+        const ret = api.post('/horarios', '', '', params)
         return ret
     }
 
-    const updateHorarioMedicamento = async (params, id) => {
-        const ret = await api.put('/horarios/', id, '', params)
+    const updateHorarioMedicamento = (params, id) => {
+        const ret = api.put('/horarios/', id, '', params)
         return ret
     }
 
@@ -65,29 +62,29 @@ function useMedicamento(medic) {
 
     }
 
-    const atualizaObj = (dados) => {
+    // const atualizaObj = (dados) => {
 
-        const medicamentoAtualizado = medicamento.map(_horarios => {
+    //     const medicamentoAtualizado = medicamento.map(_horarios => {
 
-            const horariosAtualizados = _horarios.medicamentos_horarios.map(_regs => {
+    //         const horariosAtualizados = _horarios.medicamentos_horarios.map(_regs => {
 
-                if (_regs.id === dados.horarios_id) {
+    //             if (_regs.id === dados.horarios_id) {
 
-                    return { ..._regs, horarios_medicamentos: [dados] }
+    //                 return { ..._regs, horarios_medicamentos: [dados] }
 
-                } else {
-                    return { ..._regs }
-                }
-            });
+    //             } else {
+    //                 return { ..._regs }
+    //             }
+    //         });
 
-            return { ..._horarios, medicamentos_horarios: horariosAtualizados }; // Atualiza a pessoa
+    //         return { ..._horarios, medicamentos_horarios: horariosAtualizados }; // Atualiza a pessoa
 
-        });
+    //     });
 
-        setMedic(medicamentoAtualizado)
+    //     setMedic(medicamentoAtualizado)
 
 
-    }
+    // }
 
     const habilitaDesabilita = (ptime) => {
 
@@ -130,18 +127,21 @@ function useMedicamento(medic) {
     }
 
 
-    return [
+    return {
         medicamento,
+        medicamentos,
 
         setMedicamento,
         onRegistarHorarioMedicacao,
         getMedicamento,
+        getMedicamentos,
         setUpdateMedicamento,
+        setMedicamentos,
         createMedicamento,
         createHorarioMedicamento,
         updateHorarioMedicamento,
         habilitaDesabilita
-    ]
+    }
 
 }
 

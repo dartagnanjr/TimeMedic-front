@@ -8,7 +8,20 @@ const MyButton = (props) => {
                 hidden={null} 
                 disabled={null}
                 value={props.value} 
-                onClick={(event) => props.onClick(event.target.value)}>
+                onClick={(event) => props.onClick(event.target.value)}
+                style={{
+                    "color": "white",
+                    "background-color":  "rgb(33, 120, 233)",
+                    "border-radius": "15px",
+                    "padding": "10px",
+                    "cursor": "pointer",
+                    "padding": "10px",
+                    "width": "280px",
+                    "height": "45px",
+                    "cursor": "pointer",
+                    "font-size": "1.00rem",
+                }}
+                >
                     {props.children}
             </button>
 }

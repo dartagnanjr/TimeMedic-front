@@ -49,6 +49,7 @@ const useBiometria = (idPessoa) => {
                 return
             }
             setBiometrias(result);
+            setLoading(true);
             alert('Biometria cadastrada com sucesso.')
             return result
         } catch (err) {
@@ -63,6 +64,7 @@ const useBiometria = (idPessoa) => {
         loading, 
         error,
 
+        setLoading,
         getMetricas, 
         setBiometria, 
         getBiometrias,

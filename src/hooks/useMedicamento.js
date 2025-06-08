@@ -7,6 +7,7 @@ function useMedicamento(medic) {
     
     const [medicamento, setMedic] = useState(medic)
     const [medicamentos, setMedicamentosData] = useState([])
+    const [ loading, setLoading ] = useState(false)
 
     const getMedicamentos = async (id) => {
         const dados = await api.get('/medicamentos/pessoa/', id)
@@ -34,9 +35,20 @@ function useMedicamento(medic) {
         return ret.id
     }
 
-    const getMedicamento = async () => {
-        const ret = await api.get('/medicamentos/', medicamento[0].id)
-        setMedic(ret)
+    const getMedicamento = async (medicamento_id) => {
+        const ret = await api.get('/medicamentos/', medicamento_id)
+        setMedic(...ret)
+    }
+
+    const destroyMedicamento = async (id) => {
+        const ret = await api.delete('/medicamento/horarios/', id)
+        if (ret) {
+            alert(`Medicamento ${medicamento.nome} excluído com sucesso.`)
+            setMedicamentosData(medicamentos.filter(med => med.id !== id))
+        } else {
+            alert(`Problemas ao excluir o medicamento ${medicamento.nome}.`)
+        }
+        return ret
     }
 
     const createHorarioMedicamento = (params) => {
@@ -54,9 +66,9 @@ function useMedicamento(medic) {
         const response = await api.post('/register', '', '', { horarios_id: horarios_id })
         if (!response) {
             alert("Erro gravando o horário.");
-            return
+            return Error("Erro gravando o horário.");
         }
-        getMedicamento()
+        setLoading(true)
         alert(`Horário gravado com sucesso.`)
         return
 
@@ -130,7 +142,9 @@ function useMedicamento(medic) {
     return {
         medicamento,
         medicamentos,
-
+        loading, 
+        
+        setLoading,
         setMedicamento,
         onRegistarHorarioMedicacao,
         getMedicamento,
@@ -140,7 +154,8 @@ function useMedicamento(medic) {
         createMedicamento,
         createHorarioMedicamento,
         updateHorarioMedicamento,
-        habilitaDesabilita
+        habilitaDesabilita,
+        destroyMedicamento
     }
 
 }

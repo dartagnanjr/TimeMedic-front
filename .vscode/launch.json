@@ -5,6 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Node.js",
+            "request": "launch",
+            "type": "node",
+            "program": "${workspaceFolder}/server.js",
+            "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Attach to Node.js",
+            "request": "attach",
+            "type": "node",
+            "port": 9229,
+            "restart": true,
+            "skipFiles": ["<node_internals>/**"]
+        },
+        
+        
+        {
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",

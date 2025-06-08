@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
 import './styles/Medicamento.css'
-import MyButton from "../hooks/MyButton";
+import { useEffect} from "react";
 import useMedicamento from "../hooks/useMedicamento";
 import { useNavigate } from "react-router-dom";
 import Lapis from '../components/icons/Lapis'
@@ -8,50 +7,63 @@ import Lapis from '../components/icons/Lapis'
 
 const Medicamento = (props) => {
     
-    const { medicamento, onRegistarHorarioMedicacao, getMedicamento } = useMedicamento([ props.medicamento ])
+    const { medicamento, loading, setLoading, getMedicamento, onRegistarHorarioMedicacao } = useMedicamento(props.medicamento)
+    
     const navigate = useNavigate()
     
     useEffect(() => {
-        getMedicamento()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        
+        if (loading) {
+            setLoading(false)
+            getMedicamento(props.medicamento.id)
+        }
+    }
+    , [ loading ])
 
     const montarComponente = (medic) => {
-        const retorno = medic.map(_hora => (
+        
+        const retorno = medic?.map(_hora => (
             <div>
-                {_hora.horario_planejado}
-                    <div>
+                <br />
+                {'Horário Planejado: ' + _hora.horario_planejado + '    '}
+                
+                { _hora?.horarios_medicamentos.length === 0 ?
                         <button 
                             className="button" 
-                            type="submit" 
-                            value={_hora.id} 
+                            type="button" 
+                            style={{textDecoration: "underline", 
+                                color: "#007BFF", 
+                                background: "none", 
+                                border: "none", 
+                                padding: 0, 
+                                cursor: "pointer" } }
+                            value={_hora?.id} 
                             onClick={(event) => onRegistarHorarioMedicacao(event.target.value)} 
-                            hidden={habilitaDesabilita(_hora) ? true : false}>
-                                Tomei agora 
+                            >Tomei agora 
                         </button>
-                    </div> 
-                    <div>
-                        {_hora.horarios_medicamentos.length > 0 ? 
-                            (_hora.horarios_medicamentos.length > 1 ? 
-                                new Date(_hora.horarios_medicamentos[1].updated_at).toLocaleTimeString() : 
-                                new Date(_hora.horarios_medicamentos[0].updated_at).toLocaleTimeString()) 
-                        : null}
-                    </div>
-                        
+                    : _hora?.horarios_medicamentos?.map(_hm =>
+                            <span key={_hm.id}>
+                                {'Tomado às: ' + (new Date(_hm.updated_at).toLocaleTimeString().slice(0, 5))} <br />
+                            </span>
+                    )
+                }
             </div>
         ))
         return retorno
     }
     const habilitaDesabilita = (ptime) => {
         
-        const ndate = new Date(String().concat(new Date().getFullYear(), '-', (new Date().getMonth() + 1), '-', new Date().getDate(), ' ', ptime.horario_planejado))
-
+        const ndate = 
+        new Date(String().concat(new Date().getFullYear(), '-', 
+        (new Date().getMonth() + 1), '-', 
+        new Date().getDate(), ' ', ptime.horario_planejado))
+        
         if (new Date() < ndate ) {
             
-            if (ptime.horarios_medicamentos.length === 0) {
+            if (ptime.length === 0) {
                 return true
-            } else if (ptime.horarios_medicamentos.length > 0) {
-                if (new Date(ptime.horarios_medicamentos[0].updated_at) < ndate) {
+            } else if (ptime.length > 0) {
+                if (new Date(ptime.updated_at) < ndate) {
                     return true
                 } else {
                     return false
@@ -59,12 +71,12 @@ const Medicamento = (props) => {
             }
         } else if (new Date() > ndate) {
 
-            if (ptime.horarios_medicamentos.length === 0) {
+            if (ptime.length === 0) {
                 return false
 
-            } else if (ptime.horarios_medicamentos.length > 0) {
+            } else if (ptime.length > 0) {
 
-                const segundoHorario = ptime.horarios_medicamentos.length > 1 ? new Date(ptime.horarios_medicamentos[1].updated_at) : new Date(ptime.horarios_medicamentos[0].updated_at)
+                const segundoHorario = ptime.length > 1 ? new Date(ptime.updated_at) : new Date(ptime.updated_at)
                 if (segundoHorario > ndate) {
                     return true
                 } else if (segundoHorario < ndate) {
@@ -77,46 +89,51 @@ const Medicamento = (props) => {
         
     }
     const handleEdit = () => {
-        navigate('/cadastrar-medicamentos', { state: { medic: {...medicamento} } })
+        const { ...medic } = medicamento
+        navigate('/cadastrar-medicamentos', { state: { medic: medic } })
+    }
+    const alertQtdeColor = () => {
+        if (medicamento?.quantidade_estoque <= 5) {
+            return { color: "red" }
+        } else if (medicamento?.quantidade_estoque > 5 && medicamento?.quantidade_estoque <= 10) {
+            return { color: "orange" }
+        } else {
+            return { color: "green" }
+        }
     }
     return (
         <div 
             className="medics_title">
-            <div align="center">
-                <td>
-                    <td>
-                        <tr>
-                            <b>{medicamento[0].nome.toUpperCase()}</b>
-                        </tr>
-                    </td> 
+            <form className="form_view">
+                <div>
+                    <div>
+                        <h3 style={{ color: "magenta"}}>{medicamento?.nome?.toUpperCase().slice(0, 25) + ' - (' + medicamento?.laboratorio + ')'}</h3>
+                    </div>
+                    <div>
+                        {'Dosagem: ' + medicamento?.dosagem}
+                    </div>
+                    <div>
+                        {'Prescrição: ' + medicamento?.prescricao}
+                    </div>
                     <br />
-                    <td>{medicamento[0].dosagem} - ({medicamento[0].laboratorio})</td>  
-                </td>
-                <div align="center" className="div_dosagem">
-                    <td>{medicamento[0].prescricao}</td>
-                </div>
-            </div>
-            <div className="controles">
-                <div className="label_horario" >
-                        Horário:
-                    <div className="horarios">
-                        {montarComponente(medicamento[0].medicamentos_horarios)}
+                    <div style={alertQtdeColor()}>
+                        {'Estoque restante: ' + medicamento?.quantidade_estoque} unidades
+                    </div>
+                    <br />
+                    <div>
+                        {montarComponente(medicamento?.medicamentos_horarios)}  
                     </div>
                 </div>
-                <div className="qtde">
-                        Estoque:
-                    <div className="horarios">
-                        {medicamento[0].quantidade_estoque}
-                    </div>
-                </div>
-            </div>
+
+            </form>
+            
             <div>
-                <MyButton
+                <button
                     className="bt_icon"
                     onClick={handleEdit} 
                     >
                     <Lapis tamanho={20} cor="#007BFF"></Lapis>
-                </MyButton>
+                </button>
             </div>
             <div >
                 <button 

@@ -13,7 +13,7 @@ function ListarMedicamentos(props) {
     const location = useLocation();
     const navigate = useNavigate()
     const { medicamentos } = location.state || {};
-    const {medicamento, habilitaDesabilita} = useMedicamentos(medicamentos.sort((a, b) => a.medicamentos_horarios?.map(_h => _h.horario_planejado.localeCompare(b.medicamentos_horarios?.horario_planejado))))
+    const {medicamento, habilitaDesabilita} = useMedicamentos(medicamentos)
     
     
 
@@ -35,14 +35,15 @@ function ListarMedicamentos(props) {
         <div className="ListaMedicamentos">
             
             {
-                medicamento.map(_medic => (
+                medicamento?.map(_medic => (
                     !habilitaDesabilita(_medic) ?
                         <Medicamento
+                            
                             className="medicamento"
                             medicamento={_medic}
                             removerMedicamento={() => removerMedicamento(_medic)}
                         />
-                        : null
+                       : null
                 ))
             }
             <MyButton className="formButton" onClick={() => (navigate(-1))} >Retornar</MyButton>

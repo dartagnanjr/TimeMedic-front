@@ -6,13 +6,36 @@ import useBiometria from "../hooks/useBiometria";
 const Biometria = (props) => {
     const [ values, setValue ] = useState('')
     const [ metrica_id, setMetricaId ] = useState('')
-    const { biometria, metricas, getMetricas, setBiometria } = useBiometria(props.pessoa_id)
+    const { biometria, 
+        metricas, 
+        getBiometrias, 
+        getMetricas, 
+        setBiometria, 
+        onInsertBiometria 
+    } = useBiometria(props.pessoa_id)
 
     useEffect(() => {
 
         getMetricas()
-
+        getBiometrias()
     }, [])
+
+    useEffect(() => {
+        if (biometria) {
+            setValue('')
+            setMetricaId('')
+        }
+    }, [biometria])
+
+    const handleInsertBiometria = async (biometria) => {
+        const ret = props.onInsertBiometria({ pessoa_id: props.pessoa_id, metrica_id: metrica_id, dados: values })
+        if (ret) {
+            setValue('')
+            setMetricaId('')
+        } else {
+            alert('Erro ao cadastrar biometria.');
+        }
+    }
 
     return (
         <div className="container">
@@ -32,7 +55,7 @@ const Biometria = (props) => {
                 <input className="ValorBio" type="number" name="dados" placeholder="Digite os dados correspondentes." value={values} onChange={(event) => setValue(event.target.value)} ></input>
             </div>
             <div >
-                <MyButton className="buttonSalvar" onClick={() => props.onInsertBiometria({ pessoa_id: props.pessoa_id, metrica_id: metrica_id, dados: values })}  children={"Salvar"} ></MyButton>
+                <MyButton className="buttonSalvar" onClick={handleInsertBiometria}  children={"Salvar"} ></MyButton>
             </div>
         </div>
         

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import './styles/Autenticacao.css';
 import api from '../services/api'
+import MyButton from "../hooks/MyButton";
 
 function Autenticacao(props) {
   
@@ -11,9 +12,11 @@ function Autenticacao(props) {
   
 
   const onSubmitHandler = (event) => {
-    event.preventDefault();
     
-
+    if (!email || !password) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
     const pessoa = { email, password };
     
     const retId = async () => {
@@ -27,7 +30,15 @@ function Autenticacao(props) {
         alert("Autenticação falhou. Verifique suas credenciais.");
       }
     }
-    retId()
+    try {
+      retId()
+    } catch (error) {
+      console.error("Erro ao autenticar:", error);
+      alert("Ocorreu um erro ao tentar autenticar. Por favor, tente novamente.");
+      return;
+      
+    }
+    
   };
 
   const onClickHandler = (e, ema, msg) => {
@@ -42,8 +53,8 @@ function Autenticacao(props) {
   }
 
   return (
-    <form 
-      onSubmit={onSubmitHandler}
+    <>
+      <form 
       className="autenticacao"> 
       <h2>Autenticação</h2>
       <>
@@ -90,8 +101,13 @@ function Autenticacao(props) {
           </NavLink>
         
       </>
-      <button type="submit">Enviar</button>        
+              
     </form>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <MyButton className="myButton" type="button" onClick={(event) => onSubmitHandler(event)} >Enviar</MyButton>
+      </div>
+      
+    </>
   );
 }
 

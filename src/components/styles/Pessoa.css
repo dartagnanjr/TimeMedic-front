@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 25px;
 }
 
@@ -32,8 +32,10 @@
     flex-wrap: wrap;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
     font-size: 0.95rem;
+    font-weight: bold;
     gap: 10px;
     padding: 15px;
+    color: #5082e6;
 }
 
 .buttons {
@@ -69,6 +71,9 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    color: #5082e6;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+    font-size: 0.86rem;
 }
 
 .bt_pessoa {
@@ -76,8 +81,4 @@
     justify-content: center;
     margin-top: 10px;
     padding: 10px;
-    width: 250px;
-    cursor: pointer;
-    border-radius: 15px;
-    margin-bottom: 10px;
-}
+} 

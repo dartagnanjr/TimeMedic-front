@@ -18,7 +18,7 @@ function Pessoa(props) {
     const { medicamentos, getMedicamentos } = useMedicamento([])
     const [ image, setImage ] = useState([])
     const { pessoa, getPessoa, setPessoaData } = usePessoa([]);
-    const { biometria, getBiometrias, onInsertBiometria } = useBiometria(id)
+    const { biometria, loading, setLoading, getBiometrias, onInsertBiometria } = useBiometria(id)
 
     useEffect(() => {
         const retorno = getPessoa(id)
@@ -33,10 +33,12 @@ function Pessoa(props) {
         }
     }, [ pessoa ])
 
-    useEffect(() => {
-        getBiometrias()
-        
-    }, [])
+    useEffect(() => { 
+        if (loading) {
+            getBiometrias()
+            setLoading(false)
+        }
+    }, [ biometria ])
 
     useEffect(() => {
         getMedicamentos(id);
@@ -55,10 +57,10 @@ function Pessoa(props) {
                 pessoa_id: id,
                 medicamentos_horarios: []
             }
-        
         navigate('/cadastrar-medicamentos', { state: { medic: medic } })
     }
     const onSubmitListarMedicamentos = (event) => {
+        
         navigate('/listar-medicamentos', { state: { id: id, medicamentos: medicamentos }, })
     }
 
@@ -80,15 +82,16 @@ function Pessoa(props) {
                     <b>Nascimento: {new Date(pessoa.data_nascimento).toLocaleString('pt-BR', {
                         day: '2-digit',
                         month: '2-digit',
-                        year: 'numeric'
+                        year: 'numeric',
+                        timeZone: 'America/Fortaleza'
                     }).replace(/\//g, '-')}</b>
                 </div>
                 <Biometria pessoa_id={id} onInsertBiometria={onInsertBiometria} />
             </section>
 
             <div className="listBiometria">
-                <table>
-                    <tr>
+                <table style={{ width: "100%", marginBottom: "20px" }}>
+                    <tr style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333",  }}>
                         <td><b>Medicamento</b></td>
                         <td align="center"><b>Laboratório</b></td>
                         <td align="right"><b>Dosagem</b></td>
@@ -104,14 +107,14 @@ function Pessoa(props) {
                             laboratorio={_medic.laboratorio}
                             qtde={_medic.quantidade_estoque}
                             hr_marcada={_medic.medicamentos_horarios?.sort((a, b) => a.horario_planejado).map(_hp =>
-                                _hp.horario_planejado?.slice(0, 5).concat(' - ')).toString().slice(0, -2).replace(',', '')}
+                                _hp.horario_planejado?.slice(0, 5).concat(' - ')).toString().slice(0, -2).replace(',', '').slice(0, -1).replace(/,/g, '')}
                             ult_horario={_medic.medicamentos_horarios?.map(_mh => _mh?.horarios_medicamentos?.map(_hm =>
-                                new Date(_hm?.updated_at).toLocaleTimeString().slice(0, -3).concat(' - '))).toString().slice(0, -2).replace(/,/g, '')}
+                                new Date(_hm?.updated_at).toLocaleTimeString().slice(0, -3).concat(' - '))).toString().slice(0, -3).replace(/,/g, '')}
                         />
                     )) : <tr><td colSpan="6">Nenhum medicamento cadastrado.</td></tr>}
                 </table>
-                <table>
-                    <tr>
+                <table style={{ width: "100%", marginBottom: "20px" }}>
+                    <tr style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333" }}>
                         <td><b>Metrica</b></td>
                         <td align="center"><b>Último</b></td>
                         <td align="center"><b>Media</b></td>

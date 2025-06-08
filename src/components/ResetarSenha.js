@@ -15,7 +15,7 @@ function ResetarSenha(props) {
     const { email } = location.state || {}; // Recupera o email do estado passado na navegação
   
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        //e.preventDefault();
         if (novaSenha !== confirmarSenha) {
             setMensagem('As senhas não coincidem.');
             return;
@@ -47,40 +47,49 @@ function ResetarSenha(props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="resetar-senha-form" >
-            <h2>Redefinir Senha</h2>
-            <div>
-                <b>Email:</b>
-                <input type="email" value={email} disabled />
-            </div>
-            <div>
-                <b>Nova Senha:</b>
-                <input
-                    type="password"
-                    value={novaSenha}
-                    onChange={e => setNovaSenha(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <b>Confirmar Nova Senha:</b>
-                <input
-                    type="password"
-                    value={confirmarSenha}
-                    onChange={e => setConfirmarSenha(e.target.value)}
-                    required
-                />
-            </div>
-            <div >
-                <button type="submit" disabled={carregando} className="resetar-senha-buttons">
-                    {carregando ? 'Redefinindo...' : 'Redefinir Senha'}
-                </button>
-                <MyButton onClick={() => navigate(-1)} className="resetar-senha-buttons">Cancelar</MyButton>
-                {mensagem && <p>{mensagem}</p>}
-            </div>
-            
-            
-        </form>
+        <>
+            <form  className="resetar-senha-form" >
+                <h2>Redefinir Senha</h2>
+                <div>
+                    <b>Email:</b>
+                    <input type="email" value={email} disabled />
+                </div>
+                <div>
+                    <b>Nova Senha:</b>
+                    <input
+                        type="password"
+                        value={novaSenha}
+                        onChange={e => setNovaSenha(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <b>Confirmar Nova Senha:</b>
+                    <input
+                        type="password"
+                        value={confirmarSenha}
+                        onChange={e => setConfirmarSenha(e.target.value)}
+                        required
+                    />
+                </div>
+                
+            </form>
+                <div style={{ display: 'flex', 
+                            justifyContent: 'center', 
+                            alignItems: 'center', 
+                            alignContent: 'center', 
+                            flexDirection: 'column', 
+                            marginTop: '10px', 
+                            gap: '10px' 
+                        }} >
+                    <MyButton onClick={handleSubmit} type="submit" disabled={carregando} className="resetar-senha-buttons">
+                        {carregando ? 'Redefinindo...' : 'Redefinir Senha'}
+                    </MyButton>
+                    <MyButton onClick={() => navigate(-1)} className="resetar-senha-buttons">Cancelar</MyButton>
+                    {mensagem && <p>{mensagem}</p>}
+                </div>
+        </>
+        
         
     );
 }

@@ -25,7 +25,6 @@ const api = {
                 } else {
                     dd = { ...dados }
                 }
-                
             } else {
                 throw new Error('Nenhum registro encontrado.')
             }
@@ -64,6 +63,24 @@ const api = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payLoad)
+        }).then(result => (result.json()))
+        .then(dados => {
+            if (dados) {
+                dd = { ...dados }
+                
+            } else {
+                throw new Error('Nenhum registro encontrado.')
+            }
+            return dd
+        })
+        .catch(err => { throw new Error(err)})
+        
+    },
+    delete: async (url, params = null, headers) => {
+        const conf = config()
+        let dd = []
+        return await fetch(`${conf}${url}${params}`, {
+            method: 'DELETE'
         }).then(result => (result.json()))
         .then(dados => {
             if (dados) {

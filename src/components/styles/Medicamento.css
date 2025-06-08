@@ -20,23 +20,38 @@
   }
 
   .medics_title {
-    background-color: rgba(226, 163, 68, 0.541);
-    font-size: large;
+   
     border-radius: 20px;
-    padding: 20px;
-    border: 2px solid rgb(63, 53, 158);
-    width: 300px;
-    height: 200px;
+    
+    border: 1px solid rgb(63, 53, 158);
+    width: 320px;
+    height: 250px;
     gap: 10px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    color: black;
-    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(63, 53, 158);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+    font-size: 0.86rem;
+    font-weight: bold;
+    
   }
- 
+.form_view {
+  display: flex;
+  flex-direction: column;
+  align-items: reflex-start;
+  margin-left: 15px;
+  justify-content: center;
+  width: 100%;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgb(63, 53, 158);
+  
+  border-radius: 20px;
+} 
+
 .controles {
   padding: 5px;
   display: flex;

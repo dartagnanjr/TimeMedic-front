@@ -5,9 +5,7 @@ const useBiometria = (idPessoa) => {
     const [biometria, setBiometrias ] = useState([]);
     const [metricas, setMetricas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    
+        
     const getMetricas = async () => {
         try {
             const response = await api.get('/metricas', '');
@@ -62,7 +60,6 @@ const useBiometria = (idPessoa) => {
         biometria, 
         metricas, 
         loading, 
-        error,
 
         setLoading,
         getMetricas, 

@@ -5,8 +5,8 @@ import api from "../services/api";
 
 function useMedicamento(medic) {
     
-    const [medicamento, setMedic] = useState(medic)
-    const [medicamentos, setMedicamentosData] = useState([])
+    const [medicamento, setMedic] = useState(medic.length > 0 ? [] : medic )
+    const [medicamentos, setMedicamentosData] = useState(medic)
     const [ loading, setLoading ] = useState(false)
 
     const getMedicamentos = async (id) => {
@@ -39,8 +39,22 @@ function useMedicamento(medic) {
         const ret = await api.get('/medicamentos/', medicamento_id)
         setMedic(...ret)
     }
-
-    const destroyMedicamento = async (id) => {
+    const destroyMedicamento = async (medicamento) => {
+        if (window.confirm(`Tem certeza que deseja remover o medicamento ${medicamento.nome} ?`)) {
+            const ret = await api.delete('/medicamentos/', medicamento.id)
+            if (ret) {
+                alert(`Medicamento ${medicamento.nome} excluído com sucesso.`)
+                setMedicamentosData(medicamentos.filter(med => med.id !== medicamento.id))
+            }
+            else {
+                alert(`Problemas ao excluir o medicamento ${medicamento.nome}.`)
+            }
+            return ret
+        }
+        return false
+    }
+    const destroyHorarioMedicamento = async (id) => {
+        
         const ret = await api.delete('/medicamento/horarios/', id)
         if (ret) {
             alert(`Medicamento ${medicamento.nome} excluído com sucesso.`)
@@ -68,35 +82,11 @@ function useMedicamento(medic) {
             alert("Erro gravando o horário.");
             return Error("Erro gravando o horário.");
         }
-        setLoading(true)
+        getMedicamento(medicamento.id)
         alert(`Horário gravado com sucesso.`)
         return
 
     }
-
-    // const atualizaObj = (dados) => {
-
-    //     const medicamentoAtualizado = medicamento.map(_horarios => {
-
-    //         const horariosAtualizados = _horarios.medicamentos_horarios.map(_regs => {
-
-    //             if (_regs.id === dados.horarios_id) {
-
-    //                 return { ..._regs, horarios_medicamentos: [dados] }
-
-    //             } else {
-    //                 return { ..._regs }
-    //             }
-    //         });
-
-    //         return { ..._horarios, medicamentos_horarios: horariosAtualizados }; // Atualiza a pessoa
-
-    //     });
-
-    //     setMedic(medicamentoAtualizado)
-
-
-    // }
 
     const habilitaDesabilita = (ptime) => {
 
@@ -155,6 +145,7 @@ function useMedicamento(medic) {
         createHorarioMedicamento,
         updateHorarioMedicamento,
         habilitaDesabilita,
+        destroyHorarioMedicamento,
         destroyMedicamento
     }
 

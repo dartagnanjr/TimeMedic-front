@@ -1,8 +1,12 @@
 .container {
-    display: grid;
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px; 
+    border-radius: 15px;
+    
 }
 
 .form-metricas{
@@ -13,15 +17,6 @@
     margin-bottom: 10px;
     border-radius: 10px;
 }
-.buttonSalvar {
-    border-radius: 15px;
-    color: black;
-    cursor: pointer;
-    margin-top: 5px;
-    margin-left: 10px;
-    padding: 10px;
-    width: 200px;
-}
 
 .ValorBio {
     outline: unset;
@@ -29,21 +24,8 @@
     color: rgb(30, 30, 34);  
     border: 1px solid rgb(186, 211, 211);
     padding: 4%;
-    margin-left: 5px;
+    
     width: 200px;
     margin-bottom: 6.5px;
 }
 
-.divCentral {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.h4 {
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    color: #5a42e2;
-}

@@ -7,25 +7,22 @@ import Lapis from '../components/icons/Lapis'
 
 const Medicamento = (props) => {
     
-    const { medicamento, loading, setLoading, getMedicamento, onRegistarHorarioMedicacao } = useMedicamento(props.medicamento)
+    const { medicamento, getMedicamento, onRegistarHorarioMedicacao } = useMedicamento([])
     
     const navigate = useNavigate()
     
     useEffect(() => {
-        
-        if (loading) {
-            setLoading(false)
-            getMedicamento(props.medicamento.id)
-        }
+        getMedicamento(props.medicamento.id)
     }
-    , [ loading ])
+    // eslint-disable-next-line 
+    , [ props.medicamento.id ])
 
     const montarComponente = (medic) => {
         
         const retorno = medic?.map(_hora => (
             <div>
                 <br />
-                {'Horário Planejado: ' + _hora.horario_planejado + '    '}
+                {'Horário agendado: ' + _hora.horario_planejado + '    '}
                 
                 { _hora?.horarios_medicamentos.length === 0 ?
                         <button 
@@ -51,43 +48,7 @@ const Medicamento = (props) => {
         ))
         return retorno
     }
-    const habilitaDesabilita = (ptime) => {
-        
-        const ndate = 
-        new Date(String().concat(new Date().getFullYear(), '-', 
-        (new Date().getMonth() + 1), '-', 
-        new Date().getDate(), ' ', ptime.horario_planejado))
-        
-        if (new Date() < ndate ) {
-            
-            if (ptime.length === 0) {
-                return true
-            } else if (ptime.length > 0) {
-                if (new Date(ptime.updated_at) < ndate) {
-                    return true
-                } else {
-                    return false
-                }
-            }
-        } else if (new Date() > ndate) {
-
-            if (ptime.length === 0) {
-                return false
-
-            } else if (ptime.length > 0) {
-
-                const segundoHorario = ptime.length > 1 ? new Date(ptime.updated_at) : new Date(ptime.updated_at)
-                if (segundoHorario > ndate) {
-                    return true
-                } else if (segundoHorario < ndate) {
-                    return false
-                } else {
-                    return false
-                }
-            }
-        }  
-        
-    }
+    
     const handleEdit = () => {
         const { ...medic } = medicamento
         navigate('/cadastrar-medicamentos', { state: { medic: medic } })

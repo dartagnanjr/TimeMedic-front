@@ -10,6 +10,7 @@ import useBiometria from "../hooks/useBiometria";
 import usePessoa from "../hooks/usePessoa";
 import useMedicamento from "../hooks/useMedicamento";
 
+
 function Pessoa(props) {
 
     const location = useLocation();
@@ -20,10 +21,22 @@ function Pessoa(props) {
     const { pessoa, getPessoa, setPessoaData } = usePessoa([]);
     const { biometria, loading, setLoading, getBiometrias, onInsertBiometria } = useBiometria(id)
 
+    console.log('Primeiro: ', 'id', id, 'Medicamentos', medicamentos, 'Pessoa', pessoa, 'Biometria', biometria)
     useEffect(() => {
+        getMedicamentos(id);
+        // eslint-disable-next-line 
+    }, [ id ])
+
+    console.log('Segundo: ', 'id', id, 'Medicamentos', medicamentos, 'Pessoa', pessoa, 'Biometria', biometria)
+    
+    useEffect(() => {
+        // eslint-disable-next-line 
         const retorno = getPessoa(id)
+        // eslint-disable-next-line 
         setPessoaData(retorno)
+        // eslint-disable-next-line 
     }, [ id ]);
+    
 
     useEffect(() => {
         if (pessoa.nome === ('FRANCISCO DARTAGNAN')) {
@@ -38,11 +51,10 @@ function Pessoa(props) {
             getBiometrias()
             setLoading(false)
         }
+        // eslint-disable-next-line 
     }, [ biometria ])
 
-    useEffect(() => {
-        getMedicamentos(id);
-    }, [ id ])
+    
 
     const onSubmitMedicamentos = (event) => {
         //event.preventDefault()
@@ -61,43 +73,69 @@ function Pessoa(props) {
     }
     const onSubmitListarMedicamentos = (event) => {
         
-        navigate('/listar-medicamentos', { state: { id: id, medicamentos: medicamentos }, })
+        navigate('/listar-medicamentos', { state: { id: id, medics: medicamentos }, })
     }
 
     return (
         <div>
             <section className="perfil">
-                <img
-                    src={image}
-                    alt="Button Icon"
-                    style={{ width: "160px", height: "190px", marginRight: "5px", marginLeft: "5px" }}
-                >
-                </img>
-                
-                <div className="title">
-                    <b>{pessoa.nome} {pessoa.sobre_nome} </b>
+                <div>
+                    <div className="title">
+                        <img
+                            src={image}
+                            alt="Button Icon"
+                            style={{ width: "160px", height: "190px", marginRight: "5px", marginLeft: "5px" }}
+                        >
+                        </img>
+                        <b style={{padding: "10px"}}>{pessoa.nome} {pessoa.sobre_nome} </b>
 
-                    <b>{pessoa.email}</b>
+                        <b style={{padding: "10px"}} >{pessoa.email}</b>
+                    </div>
+                    
+                    <div className="title">
+                        
 
-                    <b>Nascimento: {new Date(pessoa.data_nascimento).toLocaleString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        timeZone: 'America/Fortaleza'
-                    }).replace(/\//g, '-')}</b>
+                        <b>Nascimento: {new Date(pessoa.data_nascimento).toLocaleString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            timeZone: 'America/Fortaleza'
+                        }).replace(/\//g, '-')}</b>
+                    </div>
                 </div>
                 <Biometria pessoa_id={id} onInsertBiometria={onInsertBiometria} />
             </section>
 
             <div className="listBiometria">
                 <table style={{ width: "100%", marginBottom: "20px" }}>
-                    <tr style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333",  }}>
+                    <tr align="center" style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333" }}>
+                        <td ><b>Metrica</b></td>
+                        <td align="center"><b>Último</b></td>
+                        <td align="center"><b>Media</b></td>
+                        <td align="center"><b>Menor Valor</b></td>
+                        <td align="center"><b>Maior Valor</b></td>
+                        <td align="center"><b>Qtde</b> </td>
+
+                    </tr>
+                    {biometria ? biometria.map(_bio => (
+                        <tr align="center" key={_bio.id}>
+                            <td align="left">{_bio.nome}:</td>
+                            <td align="right" >{parseFloat(_bio.ultimo).toPrecision(3)}</td>
+                            <td align="right">{parseFloat(_bio.media).toPrecision(3)}</td>
+                            <td align="right">{parseFloat(_bio.menor_valor).toPrecision(3)}</td>
+                            <td align="right" >{parseFloat(_bio.maior_valor).toPrecision(3)}</td>
+                            <td >{_bio.quantidade}</td>
+                        </tr>
+                    )) : <tr><td colSpan="6">Nenhum dado biométrico cadastrado.</td></tr>}
+                </table>
+                <table style={{ width: "100%", marginBottom: "20px" }}>
+                    <tr align="center" style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333",  }}>
                         <td><b>Medicamento</b></td>
-                        <td align="center"><b>Laboratório</b></td>
-                        <td align="right"><b>Dosagem</b></td>
-                        <td align="right"><b>Estoque</b></td>
-                        <td align="center"><b>Horario</b></td>
-                        <td align="center"><b>Últ. Horário</b></td>
+                        <td ><b>Laboratório</b></td>
+                        <td ><b>Dosagem</b></td>
+                        <td ><b>Estoque</b></td>
+                        <td ><b>Horario</b></td>
+                        <td ><b>Últ. Horário</b></td>
                     </tr>
                     {medicamentos ? medicamentos.map(_medic => (
                         <ListaMedicamentos
@@ -113,27 +151,7 @@ function Pessoa(props) {
                         />
                     )) : <tr><td colSpan="6">Nenhum medicamento cadastrado.</td></tr>}
                 </table>
-                <table style={{ width: "100%", marginBottom: "20px" }}>
-                    <tr style={{ backgroundColor: "#f0f0f0", fontWeight: "bold", color: "#333" }}>
-                        <td><b>Metrica</b></td>
-                        <td align="center"><b>Último</b></td>
-                        <td align="center"><b>Media</b></td>
-                        <td align="center"><b>Menor Valor</b></td>
-                        <td align="center"><b>Maior Valor</b></td>
-                        <td align="center"><b>Qtde</b> </td>
-
-                    </tr>
-                    {biometria ? biometria.map(_bio => (
-                        <tr>
-                            <td>{_bio.nome}:</td>
-                            <td align="center">{parseFloat(_bio.ultimo)}</td>
-                            <td align="center">{parseFloat(_bio.media).toPrecision(4)}</td>
-                            <td align="center">{_bio.menor_valor}</td>
-                            <td align="center">{_bio.maior_valor}</td>
-                            <td align="center">{_bio.quantidade}</td>
-                        </tr>
-                    )) : <tr><td colSpan="6">Nenhum dado biométrico cadastrado.</td></tr>}
-                </table>
+                
             </div>
             <div className="but" >
                 <MyButton className="bt_pessoa" onClick={onSubmitMedicamentos}>Cadastrar</MyButton>

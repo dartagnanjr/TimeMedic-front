@@ -10,14 +10,14 @@ const Biometria = (props) => {
         metricas, 
         getBiometrias, 
         getMetricas, 
-        setBiometria, 
-        onInsertBiometria 
     } = useBiometria(props.pessoa_id)
 
     useEffect(() => {
 
         getMetricas()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         getBiometrias()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -39,23 +39,17 @@ const Biometria = (props) => {
 
     return (
         <div className="container">
-            <div className="h4">
-         
-                <h4>Biometria </h4>
-            </div>
-            
+            <h4 style={{ color: "#5a42e2"}}>Biometria </h4>
+            <select className="form-metricas" value={metrica_id} onChange={(event) => setMetricaId(event.target.value)}>
+                <option value='0'>Selecione a métrica</option>
+                {metricas ? metricas.map(_metrica => (
+                    <option value={_metrica.id}>{_metrica.nome}</option>
+                )) : <option value='0'>Nenhuma métrica encontrada.</option>}
+            </select>
+            <input className="ValorBio" type="number" name="dados" placeholder="Digite o valor." value={values} onChange={(event) => setValue(event.target.value)} ></input>
             {props.id}
-            <div className="divCentral">
-                <select className="form-metricas" value={metrica_id} onChange={(event) => setMetricaId(event.target.value)}>
-                    <option value='0'>Selecione a métrica</option>
-                    {metricas ? metricas.map(_metrica => (
-                        <option value={_metrica.id}>{_metrica.nome}</option>
-                    )) : <option value='0'>Nenhuma métrica encontrada.</option>}
-                </select>
-                <input className="ValorBio" type="number" name="dados" placeholder="Digite os dados correspondentes." value={values} onChange={(event) => setValue(event.target.value)} ></input>
-            </div>
             <div >
-                <MyButton className="buttonSalvar" onClick={handleInsertBiometria}  children={"Salvar"} ></MyButton>
+                <MyButton className="buttonSalvar" onClick={handleInsertBiometria}  children={"Adicionar"} ></MyButton>
             </div>
         </div>
         

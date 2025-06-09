@@ -3,8 +3,8 @@ const { PORT, HOST } = process.env
 
 function config() {  
     const confs = {
-        port: 3001,
-        host: '127.0.0.1',
+        port: PORT || 3001,
+        host: HOST || 'localhost',
         http: "http://"
     }
     return String().concat(confs.http, confs.host, ':', confs.port)

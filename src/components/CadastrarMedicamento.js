@@ -11,7 +11,7 @@ function CadastrarMedicamento (props) {
     const [ horario, setHorario ] = useState([])
     const horarioInputRef = useRef(null);
     
-    const { medicamento, setMedicamento, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, updateHorarioMedicamento, destroyMedicamento } = useMedicamento({
+    const { medicamento, setMedicamento, setUpdateMedicamento, createMedicamento, createHorarioMedicamento, destroyHorarioMedicamento } = useMedicamento({
         id: medic?.id || '',
         nome: medic?.nome || '',
         dosagem: medic?.dosagem || '',
@@ -30,7 +30,7 @@ function CadastrarMedicamento (props) {
                 alert('Problemas ao atualizar medicamento.')
                 return
             }
-            destroyMedicamento(medicamento.id)
+            destroyHorarioMedicamento(medicamento.id)
             // const response = horario.map(async _hor => {
                 
             //     return await updateHorarioMedicamento({ horario_planejado: _hor.horario_planejado }, _hor.id)

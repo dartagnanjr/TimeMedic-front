@@ -56,7 +56,7 @@ function CadastroPessoa() {
     return (
         <div style={{ maxWidth: 400, margin: '0 auto' }} className='cadastro-pessoa'>
             <h2>Cadastro de Pessoa</h2>
-            <form onSubmit={handleSubmit}>
+            <form >
                 <div>
                     <b>Nome:</b>
                     <input
@@ -106,13 +106,12 @@ function CadastroPessoa() {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className='div-botoes'>
-                    <button className="cadastro-pessoa-button" type="submit">Cadastrar</button>
-                    <MyButton className="cadastro-pessoa-button" onClick={() => navigate(-1)}>Cancelar</MyButton>
-                </div>
-                
+                </div>                
             </form>
+            <div className='div-botoes'>
+                <MyButton className="cadastro-pessoa-button" type="button" onClick={handleSubmit}>Cadastrar</MyButton>
+                <MyButton className="cadastro-pessoa-button" onClick={() => navigate(-1)}>Cancelar</MyButton>
+            </div>
         </div>
     );
 }

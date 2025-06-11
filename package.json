@@ -20,8 +20,9 @@
     "yarn": "^1.22.22"
   },
   "scripts": {
-    "start": "PORT=8088 HOST=0.0.0.0 react-scripts --max_old_space_size=4096 --openssl-legacy-provider start",
-    "build": "react-scripts --max_old_space_size=4096 build",
+    "start1": "PORT=8088 react-scripts --openssl-legacy-provider start",
+    "start": "PORT=8088 react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "preinstall": "npx npm-force-resolutions"

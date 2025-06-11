@@ -1,19 +1,32 @@
-const { PORT, HOST } = process.env
+const { PORT, HOST, URL_TYPE } = process.env
 
 
-function config() {  
-    const confs = {
-        port: PORT || 3001,
-        host: HOST || 'localhost',
-        http: "http://"
-    }
-    return String().concat(confs.http, confs.host, ':', confs.port)
+const isMobile = window.capacitor ? true : false;
+const isDev = process.env.NODE_ENV === 'development';
+
+const confs = {
+    port: PORT || 3001,
+    host: HOST || '192.168.0.152',
+    http: URL_TYPE || 'http://'
 }
+
+const API_BASE_URL = isMobile 
+  ? (isDev ? confs.http.concat(confs.host, ':', confs.port) 
+           : confs.http.concat('localhost:', confs.port))
+  : confs.http.concat('localhost:', confs.port);
+  
+function config() {  
+    //return String().concat(confs.http, confs.host, ':', confs.port)
+    return API_BASE_URL
+}
+
+
 
 const api = {
 
     get: async (url, params = null, headers) => {
         const conf = config()
+        console.log(conf)
         let dd = []
         return await fetch(`${conf}${url}${params}`, {
             method: 'GET'

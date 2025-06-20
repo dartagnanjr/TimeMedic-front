@@ -8,21 +8,25 @@ function Autenticacao(props) {
   
   const [email, setEmail] = useState('');
   const [password, setSenha] = useState('');
+  const [mensagem, setMensagem ] = useState('');
+
   const navigate = useNavigate(); // Hook para navegação
   
 
   const onSubmitHandler = (event) => {
-    
+    setMensagem('Tentando conectar')
     if (!email || !password) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
     const pessoa = { email, password };
-    
+    setMensagem('Tentando conectar 2', email, password)
     const retId = async () => {
+      
       const response = await api.post('/auth', '', '', pessoa )
       setEmail('');
       setSenha('');
+      
       if (response.id) {
         // Navega para o componente Pessoas e passa o id como estado
         navigate('/pessoas', { state: { id: response.id } });
@@ -31,8 +35,12 @@ function Autenticacao(props) {
       }
     }
     try {
+      setMensagem('Tentando conectar 3')
       retId()
+      return
+      
     } catch (error) {
+      setMensagem('Mensagem: Problemas ao conectar Backend = ', error)
       console.error("Erro ao autenticar:", error);
       alert("Ocorreu um erro ao tentar autenticar. Por favor, tente novamente.");
       return;
@@ -101,7 +109,11 @@ function Autenticacao(props) {
           </NavLink>
         
       </>
-              
+      <>
+        <text value={mensagem}>
+          {mensagem ? mensagem : ''}
+        </text>
+      </>  
     </form>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <MyButton className="myButton" type="button" onClick={(event) => onSubmitHandler(event)} >Enviar</MyButton>

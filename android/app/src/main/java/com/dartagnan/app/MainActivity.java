@@ -1,4 +1,4 @@
-package com.controlremedios.app;
+package com.dartagnan.app;
 
 import com.getcapacitor.BridgeActivity;
 

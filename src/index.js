@@ -10,8 +10,6 @@ import FormPrincipal from './components/FormPrincipal'
 import CadastroPessoa from './components/CadastroPessoa';
 import ResetarSenha from './components/ResetarSenha';
 
-const isMobile = window.capacitor ? true : false;
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -44,9 +42,7 @@ const router = createBrowserRouter([
     element: <ResetarSenha email="" />
   }
 
-], {
-  basename: isMobile ? '' : '/'  // 2. Aplica o basename correto
-}
+]
 )
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

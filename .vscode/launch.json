@@ -12,7 +12,12 @@
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
             "env": {
-                "NODE_ENV": "development"
+                "NODE_ENV": "development",
+                "PORT": "3001",
+                "HOST": "127.0.0.1",
+                "FAST_REFRESH": "false",
+                "SKIP_PREFLIGHT_CHECK": "true",
+                "URL_TYPE": "http://"
             },
             "console": "integratedTerminal"
         },
@@ -30,7 +35,7 @@
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "http://localhost:8089",
+            "url": "http://localhost:8088",
             "webRoot": "${workspaceFolder}"
         }
 

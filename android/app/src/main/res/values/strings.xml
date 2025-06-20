@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">fron-remedios</string>
-    <string name="title_activity_main">fron-remedios</string>
-    <string name="package_name">com.controlremedios.app</string>
-    <string name="custom_url_scheme">com.controlremedios.app</string>
+    <string name="app_name">TimeMedic</string>
+    <string name="title_activity_main">TimeMedic</string>
+    <string name="package_name">com.dartagnan.app</string>
+    <string name="custom_url_scheme">com.dartagnan.app</string>
 </resources>

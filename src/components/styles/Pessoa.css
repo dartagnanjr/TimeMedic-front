@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: grid;
-    gap: 25px;
+    gap: 2px;
 }
 
 .cadbiometria {
@@ -58,7 +58,7 @@
 }
 
 .list {
-    margin-top: 15px;
+    margin-top: 10px;
     justify-items: center;
     font-size: 0.85rem;
 
@@ -68,6 +68,7 @@
     margin: 0;
     padding: 0;
     display: flex;
+    margin-top: 5px;
     align-items: center;
     justify-content: center;
     flex-direction: column;

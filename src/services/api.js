@@ -1,36 +1,11 @@
+import axios from "../configs/axios-api"
 const { PORT, HOST, URL_TYPE } = process.env
-
-
-const isMobile = window.capacitor ? true : false;
-const isDev = process.env.NODE_ENV === 'development';
-
-const confs = {
-    port: PORT || 3001,
-    host: HOST || '192.168.0.152',
-    http: URL_TYPE || 'http://'
-}
-
-const API_BASE_URL = isMobile 
-  ? (isDev ? confs.http.concat(confs.host, ':', confs.port) 
-           : confs.http.concat('localhost:', confs.port))
-  : confs.http.concat('localhost:', confs.port);
-  
-function config() {  
-    //return String().concat(confs.http, confs.host, ':', confs.port)
-    return API_BASE_URL
-}
-
-
 
 const api = {
 
     get: async (url, params = null, headers) => {
-        const conf = config()
-        console.log(conf)
         let dd = []
-        return await fetch(`${conf}${url}${params}`, {
-            method: 'GET'
-        }).then(result => (result.json()))
+        return await axios.get(`${url}${params}`)    
         .then(dados => {
             if (dados) {
                 if (Array.isArray(dados)){
@@ -46,13 +21,8 @@ const api = {
         .catch(err => { throw new Error(err)})
     },
     post: async (url, params = null, headers, payLoad) => {
-        const conf = config()
         let dd = []
-        return await fetch(`${conf}${url}${params}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payLoad)
-        }).then(result => (result.json()))
+        return await axios.post(`${url}${params}`, payLoad)
         .then(dados => {
             if (dados) {
                 if (Array.isArray(dados)){
@@ -70,13 +40,8 @@ const api = {
         
     },
     put: async (url, params = null, headers = null, payLoad) => {
-        const conf = config()
         let dd = []
-        return await fetch(`${conf}${url}${params}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payLoad)
-        }).then(result => (result.json()))
+        return await axios.put(`${url}${params}`, payLoad)
         .then(dados => {
             if (dados) {
                 dd = { ...dados }
@@ -90,11 +55,8 @@ const api = {
         
     },
     delete: async (url, params = null, headers) => {
-        const conf = config()
         let dd = []
-        return await fetch(`${conf}${url}${params}`, {
-            method: 'DELETE'
-        }).then(result => (result.json()))
+        return await axios.delete(`${url}${params}`)
         .then(dados => {
             if (dados) {
                 dd = { ...dados }

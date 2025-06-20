@@ -21,14 +21,11 @@ function Pessoa(props) {
     const { pessoa, getPessoa, setPessoaData } = usePessoa([]);
     const { biometria, loading, setLoading, getBiometrias, onInsertBiometria } = useBiometria(id)
 
-    console.log('Primeiro: ', 'id', id, 'Medicamentos', medicamentos, 'Pessoa', pessoa, 'Biometria', biometria)
     useEffect(() => {
         getMedicamentos(id);
         // eslint-disable-next-line 
     }, [ id ])
 
-    console.log('Segundo: ', 'id', id, 'Medicamentos', medicamentos, 'Pessoa', pessoa, 'Biometria', biometria)
-    
     useEffect(() => {
         // eslint-disable-next-line 
         const retorno = getPessoa(id)
@@ -84,12 +81,12 @@ function Pessoa(props) {
                         <img
                             src={image}
                             alt="Button Icon"
-                            style={{ width: "160px", height: "190px", marginRight: "5px", marginLeft: "5px" }}
+                            style={{ width: "160px", height: "190px", marginRight: "15px", marginLeft: "15px" }}
                         >
                         </img>
-                        <b style={{padding: "10px"}}>{pessoa.nome} {pessoa.sobre_nome} </b>
+                        <b style={{padding: "2px"}}>{pessoa.nome} {pessoa.sobre_nome} </b>
 
-                        <b style={{padding: "10px"}} >{pessoa.email}</b>
+                        <b style={{padding: "2px"}} >{pessoa.email}</b>
                     </div>
                     
                     <div className="title">
